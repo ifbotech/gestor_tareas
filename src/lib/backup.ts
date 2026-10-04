@@ -51,7 +51,9 @@ export function parseBackup(text: string): { tasks: Task[]; log: LogEntry[] } {
   }
   const tasks = data.tasks.filter(isTask).map(normalizeTask);
   const log = data.log
-    .filter((e): e is LogEntry => isObj(e) && typeof e.id === 'string' && isTask(e.task) && typeof e.completedAt === 'number')
+    .filter(
+      (e): e is LogEntry => isObj(e) && typeof e.id === 'string' && isTask(e.task) && typeof e.completedAt === 'number',
+    )
     .map((e) => ({
       ...e,
       task: normalizeTask(e.task),

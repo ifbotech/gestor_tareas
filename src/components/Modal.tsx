@@ -15,7 +15,16 @@ interface ModalProps {
   className?: string;
 }
 
-export function Modal({ open, onClose, title, children, footer, size = 'md', placement = 'center', className = '' }: ModalProps) {
+export function Modal({
+  open,
+  onClose,
+  title,
+  children,
+  footer,
+  size = 'md',
+  placement = 'center',
+  className = '',
+}: ModalProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;

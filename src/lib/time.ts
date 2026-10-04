@@ -51,7 +51,7 @@ export function parseDuration(input: string): number | null {
 }
 
 export function trackedMs(task: Pick<Task, 'trackedMs' | 'runningSince'>, now = Date.now()): number {
-  return task.trackedMs + (task.runningSince ? Math.max(0, now - task.runningSince) : 0);
+  return task.trackedMs + (task.runningSince != null ? Math.max(0, now - task.runningSince) : 0);
 }
 
 export function dayKey(ts: number): string {
@@ -74,7 +74,7 @@ export function startOfWeek(ts = Date.now()): number {
 }
 
 const dayFmt = new Intl.DateTimeFormat('es-AR', { weekday: 'long', day: 'numeric', month: 'long' });
-const timeFmt = new Intl.DateTimeFormat('es-AR', { hour: '2-digit', minute: '2-digit' });
+const timeFmt = new Intl.DateTimeFormat('es-AR', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
 
 export function dayLabel(ts: number, now = Date.now()): string {
   const today = startOfDay(now);

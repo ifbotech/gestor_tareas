@@ -7,6 +7,9 @@ import { seedFirstRun } from './seed';
 
 seedFirstRun();
 
+// Así el botón "Mail → Mojarrita" de la barra de favoritos reutiliza esta pestaña en vez de abrir otra.
+if (!window.name) window.name = 'mojarrita';
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />

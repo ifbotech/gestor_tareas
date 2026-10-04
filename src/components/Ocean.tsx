@@ -35,7 +35,10 @@ export function Ocean() {
       ))}
       <svg className="ocean-waves" viewBox="0 0 1440 160" preserveAspectRatio="none">
         <path className="wave wave-1" d="M0 80 C 240 40 480 120 720 80 C 960 40 1200 120 1440 80 L1440 160 L0 160 Z" />
-        <path className="wave wave-2" d="M0 100 C 200 130 440 60 720 100 C 1000 140 1240 70 1440 100 L1440 160 L0 160 Z" />
+        <path
+          className="wave wave-2"
+          d="M0 100 C 200 130 440 60 720 100 C 1000 140 1240 70 1440 100 L1440 160 L0 160 Z"
+        />
       </svg>
     </div>
   );

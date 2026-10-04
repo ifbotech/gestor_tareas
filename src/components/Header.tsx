@@ -35,7 +35,12 @@ export function Header() {
         <button type="button" className="top-btn" onClick={() => setLogOpen(true)}>
           <IconBook size={17} /> <span className="hide-sm">Bitácora</span>
         </button>
-        <button type="button" className="top-btn" onClick={() => setHelpOpen(true)} title="Cómo vincular mails de Outlook">
+        <button
+          type="button"
+          className="top-btn"
+          onClick={() => setHelpOpen(true)}
+          title="Cómo vincular mails de Outlook"
+        >
           <IconMail size={17} /> <span className="hide-sm">Outlook</span>
         </button>
         <MoreMenu />
@@ -66,7 +71,11 @@ function MoreMenu() {
 
   const exportBackup = () => {
     const { tasks, log } = useTasks.getState();
-    downloadFile(`mojarrita-backup-${dayKey(Date.now())}.json`, JSON.stringify(makeBackup(tasks, log), null, 2), 'application/json');
+    downloadFile(
+      `mojarrita-backup-${dayKey(Date.now())}.json`,
+      JSON.stringify(makeBackup(tasks, log), null, 2),
+      'application/json',
+    );
     setOpen(false);
     toast('Copia de seguridad descargada');
   };
@@ -89,7 +98,13 @@ function MoreMenu() {
 
   return (
     <div className="menu" ref={ref}>
-      <button type="button" className="top-btn top-btn--icon" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-label="Más opciones">
+      <button
+        type="button"
+        className="top-btn top-btn--icon"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        aria-label="Más opciones"
+      >
         <IconDots size={18} />
       </button>
       <AnimatePresence>

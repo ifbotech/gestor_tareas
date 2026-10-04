@@ -92,13 +92,19 @@ export function IncomingMail() {
           <MailChips mails={[{ id: 'preview', url: incoming.url, subject: subject || title, addedAt: 0 }]} />
           {isGenericOutlookUrl(incoming.url) && (
             <p className="hint hint--warn">
-              Ojo: ese link no apunta a un mail puntual. En Outlook web hacé clic en el mail y volvé a copiar la dirección.
+              Ojo: ese link no apunta a un mail puntual. En Outlook web hacé clic en el mail y volvé a copiar la
+              dirección.
             </p>
           )}
           {incoming.url && (
             <label className="field">
               <span>Asunto del mail (para encontrarlo si el link deja de andar)</span>
-              <input className="input" value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Asunto o remitente" />
+              <input
+                className="input"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                placeholder="Asunto o remitente"
+              />
             </label>
           )}
 

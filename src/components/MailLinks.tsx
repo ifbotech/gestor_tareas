@@ -31,7 +31,13 @@ export function MailChips({ mails, onRemove }: { mails: MailLink[]; onRemove?: (
             </span>
             <span className="mail-text">
               <strong title={mailTitle(m)}>{mailTitle(m)}</strong>
-              <small>{m.url ? (kind === 'outlook' ? `Outlook · ${mailHost(m.url)}` : mailHost(m.url)) : 'Sin link: buscalo por asunto'}</small>
+              <small>
+                {m.url
+                  ? kind === 'outlook'
+                    ? `Outlook · ${mailHost(m.url)}`
+                    : mailHost(m.url)
+                  : 'Sin link: buscalo por asunto'}
+              </small>
             </span>
             {m.url && (
               <a className="mail-open" href={m.url} target="_blank" rel="noopener noreferrer" title="Abrir el mail">
@@ -39,12 +45,24 @@ export function MailChips({ mails, onRemove }: { mails: MailLink[]; onRemove?: (
               </a>
             )}
             {m.subject && (
-              <button type="button" className="mail-icon-btn" onClick={copySubject} title="Copiar el asunto para buscarlo en Outlook" aria-label="Copiar asunto">
+              <button
+                type="button"
+                className="mail-icon-btn"
+                onClick={copySubject}
+                title="Copiar el asunto para buscarlo en Outlook"
+                aria-label="Copiar asunto"
+              >
                 <IconCopy size={14} />
               </button>
             )}
             {onRemove && (
-              <button type="button" className="mail-icon-btn" onClick={() => onRemove(m.id)} title="Desvincular" aria-label="Desvincular mail">
+              <button
+                type="button"
+                className="mail-icon-btn"
+                onClick={() => onRemove(m.id)}
+                title="Desvincular"
+                aria-label="Desvincular mail"
+              >
                 <IconX size={14} />
               </button>
             )}
@@ -56,7 +74,13 @@ export function MailChips({ mails, onRemove }: { mails: MailLink[]; onRemove?: (
 }
 
 /** Formulario para vincular un mail: se pega el link (y/o el asunto). */
-export function MailAddForm({ onAdd, autoFocus }: { onAdd(mail: { url?: string; subject: string }): void; autoFocus?: boolean }) {
+export function MailAddForm({
+  onAdd,
+  autoFocus,
+}: {
+  onAdd(mail: { url?: string; subject: string }): void;
+  autoFocus?: boolean;
+}) {
   const [raw, setRaw] = useState('');
   const [subject, setSubject] = useState('');
   const setHelpOpen = useUI((s) => s.setHelpOpen);
@@ -108,8 +132,8 @@ export function MailAddForm({ onAdd, autoFocus }: { onAdd(mail: { url?: string; 
       )}
       {generic && (
         <p className="hint hint--warn">
-          Ese link parece de la bandeja o de una ventana emergente, no de un mail puntual. Hacé clic en el mail dentro de
-          Outlook web y copiá la dirección de nuevo.
+          Ese link parece de la bandeja o de una ventana emergente, no de un mail puntual. Hacé clic en el mail dentro
+          de Outlook web y copiá la dirección de nuevo.
         </p>
       )}
       <button type="button" className="link-btn" onClick={() => setHelpOpen(true)}>

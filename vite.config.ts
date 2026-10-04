@@ -15,7 +15,8 @@ export default defineConfig({
       manifest: {
         name: 'Mojarrita · Gestor de tareas',
         short_name: 'Mojarrita',
-        description: 'Tareas rápidas, proyectos con subtareas y un balde donde cada tarea terminada cae como una mojarrita.',
+        description:
+          'Tareas rápidas, proyectos con subtareas y un balde donde cada tarea terminada cae como una mojarrita.',
         lang: 'es',
         start_url: '.',
         scope: '.',

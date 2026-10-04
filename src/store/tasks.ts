@@ -37,11 +37,10 @@ export interface TasksState {
   replaceAll(data: { tasks: Task[]; log: LogEntry[] }): void;
 }
 
-const mapTask = (tasks: Task[], id: string, fn: (t: Task) => Task) =>
-  tasks.map((t) => (t.id === id ? fn(t) : t));
+const mapTask = (tasks: Task[], id: string, fn: (t: Task) => Task) => tasks.map((t) => (t.id === id ? fn(t) : t));
 
 const pause = (t: Task, now: number): Task =>
-  t.runningSince ? { ...t, trackedMs: trackedMs(t, now), runningSince: undefined } : t;
+  t.runningSince != null ? { ...t, trackedMs: trackedMs(t, now), runningSince: undefined } : t;
 
 export const useTasks = create<TasksState>()(
   persist(
@@ -135,7 +134,9 @@ export const useTasks = create<TasksState>()(
         const now = Date.now();
         // Una cosa a la vez: arrancar una tarea pausa las demás.
         set((s) => ({
-          tasks: s.tasks.map((t) => (t.id === id ? (t.runningSince ? t : { ...t, runningSince: now }) : pause(t, now))),
+          tasks: s.tasks.map((t) =>
+            t.id === id ? (t.runningSince != null ? t : { ...t, runningSince: now }) : pause(t, now),
+          ),
         }));
       },
 

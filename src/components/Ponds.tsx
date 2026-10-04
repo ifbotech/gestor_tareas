@@ -74,7 +74,9 @@ export function Pond({ kind }: { kind: TaskKind }) {
 
       <div className="cards">
         <AnimatePresence initial={false}>
-          {tasks.map((t) => (kind === 'quick' ? <QuickCard key={t.id} task={t} /> : <ProjectCard key={t.id} task={t} />))}
+          {tasks.map((t) =>
+            kind === 'quick' ? <QuickCard key={t.id} task={t} /> : <ProjectCard key={t.id} task={t} />,
+          )}
         </AnimatePresence>
         {tasks.length === 0 && (
           <div className="empty">

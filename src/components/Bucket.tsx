@@ -117,13 +117,26 @@ function BucketSvg({ fishCount, hot }: { fishCount: number; hot: boolean }) {
       {/* manija */}
       <g className="bucket-handle">
         <path d="M16 62 C14 6 146 6 144 62" fill="none" stroke="#56606a" strokeWidth="4.5" strokeLinecap="round" />
-        <path d="M18 60 C17 9 143 9 142 60" fill="none" stroke="#c8d0d7" strokeWidth="1.3" strokeLinecap="round" opacity="0.8" />
+        <path
+          d="M18 60 C17 9 143 9 142 60"
+          fill="none"
+          stroke="#c8d0d7"
+          strokeWidth="1.3"
+          strokeLinecap="round"
+          opacity="0.8"
+        />
         <rect x="64" y="7" width="32" height="10" rx="5" fill="#3d4650" />
         <rect x="66" y="8.5" width="28" height="3" rx="1.5" fill="#6b7580" />
       </g>
 
       {/* cuerpo */}
-      <path d="M14 58 L34 154 Q80 167 126 154 L146 58 Z" fill="url(#bk-body)" stroke="#5f6974" strokeWidth="1.5" strokeLinejoin="round" />
+      <path
+        d="M14 58 L34 154 Q80 167 126 154 L146 58 Z"
+        fill="url(#bk-body)"
+        stroke="#5f6974"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
       <path d="M20.5 89 Q80 105 139.5 89" fill="none" stroke="#66707b" strokeWidth="2.2" opacity="0.55" />
       <path d="M21 92 Q80 108 139 92" fill="none" stroke="#fff" strokeWidth="1.6" opacity="0.35" />
       <path d="M27.5 123 Q80 137 132.5 123" fill="none" stroke="#66707b" strokeWidth="2.2" opacity="0.55" />
@@ -154,7 +167,11 @@ function BucketSvg({ fishCount, hot }: { fishCount: number; hot: boolean }) {
             >
               <g transform={`translate(${l.x} ${l.y}) scale(${l.d < 0 ? -1 : 1} 1)`}>
                 <path d="M-8 0 L-13 -3.5 C-12 -1 -12 1 -13 3.5 Z" fill="#f2a945" opacity="0.85" />
-                <path d="M-9 0 C-6 -4 4 -4.5 9 -1.5 C10 -0.8 10.5 0 10.5 0 C10.5 0 10 0.8 9 1.5 C4 4.5 -6 4 -9 0 Z" fill="#dbe8f0" opacity="0.92" />
+                <path
+                  d="M-9 0 C-6 -4 4 -4.5 9 -1.5 C10 -0.8 10.5 0 10.5 0 C10.5 0 10 0.8 9 1.5 C4 4.5 -6 4 -9 0 Z"
+                  fill="#dbe8f0"
+                  opacity="0.92"
+                />
                 <circle cx="7" cy="-0.8" r="0.9" fill="#15212a" />
               </g>
             </g>

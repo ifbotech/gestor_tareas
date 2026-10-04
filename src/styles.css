@@ -133,7 +133,12 @@ body.is-fishing * {
   position: absolute;
   bottom: -30px;
   border-radius: 50%;
-  background: radial-gradient(circle at 32% 30%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.25) 45%, rgba(255, 255, 255, 0.08) 70%);
+  background: radial-gradient(
+    circle at 32% 30%,
+    rgba(255, 255, 255, 0.95),
+    rgba(255, 255, 255, 0.25) 45%,
+    rgba(255, 255, 255, 0.08) 70%
+  );
   border: 1px solid rgba(255, 255, 255, 0.55);
   animation-name: bubble-rise;
   animation-timing-function: linear;
@@ -2235,7 +2240,7 @@ textarea.log-comment {
 .toasts {
   position: fixed;
   left: 50%;
-  bottom: 22px;
+  top: 18px;
   transform: translateX(-50%);
   z-index: 90;
   display: flex;
@@ -2270,6 +2275,15 @@ textarea.log-comment {
 }
 
 /* ---------- Responsive ---------- */
+
+/* En pantallas anchas el balde tiene su propio carril y no tapa tarjetas. */
+@media (min-width: 1180px) {
+  .app {
+    max-width: 1460px;
+    padding-right: 210px;
+    padding-bottom: 80px;
+  }
+}
 
 @media (max-width: 900px) {
   .ponds {
@@ -2361,7 +2375,7 @@ textarea.log-comment {
   }
 
   .toasts {
-    bottom: 150px;
+    top: 12px;
   }
 }
 

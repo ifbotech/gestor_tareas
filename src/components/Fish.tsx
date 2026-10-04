@@ -51,7 +51,13 @@ export function Fish({ width = 96, swim = true, className = '' }: FishProps) {
       </g>
 
       {/* aletas de atrás: dorsal, adiposa y anal */}
-      <path className="fish-dorsal" d="M59 14 C62 8 67 3 75 2 C73 6 73 10 76 13 Z" fill="#f2bb4c" stroke="#c9862c" strokeWidth="0.7" />
+      <path
+        className="fish-dorsal"
+        d="M59 14 C62 8 67 3 75 2 C73 6 73 10 76 13 Z"
+        fill="#f2bb4c"
+        stroke="#c9862c"
+        strokeWidth="0.7"
+      />
       <ellipse cx="45" cy="17" rx="3.2" ry="1.8" fill="#9db9c9" />
       <path d="M45 45 C49 51 55 54 62 53 C59 50 58 48 59 45 Z" fill="#f2bb4c" stroke="#c9862c" strokeWidth="0.6" />
 
@@ -62,8 +68,21 @@ export function Fish({ width = 96, swim = true, className = '' }: FishProps) {
         strokeWidth="1.2"
       />
       {/* brillo del lomo y franja lateral */}
-      <path d="M50 20 C62 15 78 14 92 17" stroke="#fff" strokeWidth="2" opacity="0.45" fill="none" strokeLinecap="round" />
-      <path d="M38 30 C58 27 86 26 108 29" stroke={`url(#${id}-stripe)`} strokeWidth="3.4" fill="none" strokeLinecap="round" />
+      <path
+        d="M50 20 C62 15 78 14 92 17"
+        stroke="#fff"
+        strokeWidth="2"
+        opacity="0.45"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <path
+        d="M38 30 C58 27 86 26 108 29"
+        stroke={`url(#${id}-stripe)`}
+        strokeWidth="3.4"
+        fill="none"
+        strokeLinecap="round"
+      />
       {/* escamitas */}
       <g stroke="#7d9db0" strokeWidth="0.6" fill="none" opacity="0.45">
         <path d="M58 36 q3 3 6 0 M66 36 q3 3 6 0 M74 36 q3 3 6 0 M62 41 q3 3 6 0 M70 41 q3 3 6 0" />
@@ -78,13 +97,27 @@ export function Fish({ width = 96, swim = true, className = '' }: FishProps) {
       <circle cx="104" cy="26" r="5" fill="#fbf3d2" stroke="#7d8f99" strokeWidth="0.8" />
       <circle cx="105" cy="26" r="2.9" fill="#15212a" />
       <circle cx="106.1" cy="24.8" r="1" fill="#fff" />
-      <path d="M114 32 C112 33.2 110 33.2 108.5 32.6" stroke="#47677b" strokeWidth="1" fill="none" strokeLinecap="round" />
+      <path
+        d="M114 32 C112 33.2 110 33.2 108.5 32.6"
+        stroke="#47677b"
+        strokeWidth="1"
+        fill="none"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
 
 /** Silueta chiquita para el balde, el logo y la bitácora. */
-export function MiniFish({ size = 28, color = '#cfe0ea', className = '' }: { size?: number; color?: string; className?: string }) {
+export function MiniFish({
+  size = 28,
+  color = '#cfe0ea',
+  className = '',
+}: {
+  size?: number;
+  color?: string;
+  className?: string;
+}) {
   return (
     <svg className={className} width={size} height={size / 2} viewBox="0 0 40 20" aria-hidden="true">
       <path d="M12 10 L3 3 C4.5 7 4.5 13 3 17 Z" fill="#f2a945" />

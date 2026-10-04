@@ -12,9 +12,9 @@ export function Toasts() {
             key={t.id}
             layout
             className="toast"
-            initial={{ opacity: 0, y: 16, scale: 0.96 }}
+            initial={{ opacity: 0, y: -16, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.96 }}
+            exit={{ opacity: 0, y: -8, scale: 0.96 }}
           >
             <span>{t.text}</span>
             {t.actionLabel && (

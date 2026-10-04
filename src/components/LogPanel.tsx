@@ -31,7 +31,13 @@ export function LogPanel() {
     const q = query.trim().toLowerCase();
     if (!q) return sorted;
     return sorted.filter((e) =>
-      [e.task.title, e.comment, e.task.notes, ...e.task.mails.map((m) => m.subject), ...e.task.subtasks.map((s) => s.title)]
+      [
+        e.task.title,
+        e.comment,
+        e.task.notes,
+        ...e.task.mails.map((m) => m.subject),
+        ...e.task.subtasks.map((s) => s.title),
+      ]
         .join(' ')
         .toLowerCase()
         .includes(q),
@@ -64,7 +70,9 @@ export function LogPanel() {
           type="button"
           className="btn btn-ghost"
           disabled={!log.length}
-          onClick={() => downloadFile(`bitacora-mojarrita-${dayKey(Date.now())}.csv`, logToCsv(sorted), 'text/csv;charset=utf-8')}
+          onClick={() =>
+            downloadFile(`bitacora-mojarrita-${dayKey(Date.now())}.csv`, logToCsv(sorted), 'text/csv;charset=utf-8')
+          }
         >
           <IconDownload size={16} /> Exportar a Excel (CSV)
         </button>
@@ -79,7 +87,12 @@ export function LogPanel() {
       {log.length > 0 && (
         <label className="search">
           <IconSearch size={16} />
-          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar en la bitácora…" aria-label="Buscar en la bitácora" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Buscar en la bitácora…"
+            aria-label="Buscar en la bitácora"
+          />
         </label>
       )}
 
@@ -147,7 +160,10 @@ function LogRow({ entry }: { entry: LogEntry }) {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20, height: 0, marginBottom: 0, paddingTop: 0, paddingBottom: 0 }}
     >
-      <span className="log-fish" style={{ background: `linear-gradient(140deg, ${tone(t.tone).from}, ${tone(t.tone).to})` }}>
+      <span
+        className="log-fish"
+        style={{ background: `linear-gradient(140deg, ${tone(t.tone).from}, ${tone(t.tone).to})` }}
+      >
         <MiniFish size={30} />
       </span>
       <div className="log-main">
@@ -158,7 +174,9 @@ function LogRow({ entry }: { entry: LogEntry }) {
         </p>
 
         <div className="log-fields">
-          <span className={`log-duration ${entry.minutes == null ? 'is-empty' : ''} ${badDuration ? 'is-invalid' : ''}`}>
+          <span
+            className={`log-duration ${entry.minutes == null ? 'is-empty' : ''} ${badDuration ? 'is-invalid' : ''}`}
+          >
             <IconClock size={14} />
             <EditableText
               value={entry.minutes != null ? formatMinutes(entry.minutes) : ''}
@@ -214,7 +232,12 @@ function LogRow({ entry }: { entry: LogEntry }) {
               >
                 <IconUndo size={14} /> Devolver al agua
               </button>
-              <button type="button" className="btn btn-sm btn-ghost btn-danger-text" onClick={() => setConfirm(true)} aria-label="Borrar de la bitácora">
+              <button
+                type="button"
+                className="btn btn-sm btn-ghost btn-danger-text"
+                onClick={() => setConfirm(true)}
+                aria-label="Borrar de la bitácora"
+              >
                 <IconTrash size={14} />
               </button>
             </>

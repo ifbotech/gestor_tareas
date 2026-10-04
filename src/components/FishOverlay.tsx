@@ -26,7 +26,12 @@ interface Bubble {
 
 let bubbleSeq = 0;
 const rand = (a: number, b: number) => a + Math.random() * (b - a);
-const spring = (stiffness: number, damping: number, mass = 1) => ({ type: 'spring' as const, stiffness, damping, mass });
+const spring = (stiffness: number, damping: number, mass = 1) => ({
+  type: 'spring' as const,
+  stiffness,
+  damping,
+  mass,
+});
 const FOLLOW = spring(900, 55, 0.5);
 
 /**
@@ -292,11 +297,7 @@ export function FishOverlay() {
           }
         >
           <motion.div className="fish-runner" style={{ x: left, y: top, rotate: rot, scale, opacity }}>
-            <motion.div
-              className="fish-flip"
-              animate={{ scaleX: facing }}
-              transition={spring(520, 30)}
-            >
+            <motion.div className="fish-flip" animate={{ scaleX: facing }} transition={spring(520, 30)}>
               <Fish width={FISH_W} />
             </motion.div>
           </motion.div>

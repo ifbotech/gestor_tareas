@@ -108,7 +108,7 @@ export function TaskDetail() {
             aria-label="Nombre de la tarea"
           />
           <p className="detail-meta">
-            Creada: {todayLong(task.createdAt).toLowerCase()}, {formatTime(task.createdAt)} h
+            Creada el {todayLong(task.createdAt).toLowerCase()}, {formatTime(task.createdAt)} h
           </p>
 
           <div className="detail-row">

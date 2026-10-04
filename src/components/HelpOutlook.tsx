@@ -25,8 +25,8 @@ export function HelpOutlook() {
     <Modal open={open} onClose={() => setOpen(false)} size="lg" title="Vincular mails de Outlook">
       <div className="help">
         <p className="help-lead">
-          Cada tarea puede tener uno o más mails vinculados. Se guarda el <strong>link</strong> (para abrir el mail con un
-          clic) y el <strong>asunto</strong> (para encontrarlo aunque el link deje de andar).
+          Cada tarea puede tener uno o más mails vinculados. Se guarda el <strong>link</strong> (para abrir el mail con
+          un clic) y el <strong>asunto</strong> (para encontrarlo aunque el link deje de andar).
         </p>
 
         <ol className="help-steps">
@@ -36,17 +36,17 @@ export function HelpOutlook() {
             </h3>
             <ol>
               <li>
-                Abrí Outlook web (<code>outlook.office.com</code> o <code>outlook.cloud.microsoft</code>) y hacé clic en el
-                mail o la conversación.
+                Abrí Outlook web (<code>outlook.office.com</code> o <code>outlook.cloud.microsoft</code>) y hacé clic en
+                el mail o la conversación.
               </li>
               <li>
-                Copiá la dirección de la barra del navegador (<kbd>Ctrl</kbd>+<kbd>L</kbd> y <kbd>Ctrl</kbd>+<kbd>C</kbd>).
-                Se ve algo así: <code>outlook.office.com/mail/inbox/id/AAQk…</code>
+                Copiá la dirección de la barra del navegador (<kbd>Ctrl</kbd>+<kbd>L</kbd> y <kbd>Ctrl</kbd>+
+                <kbd>C</kbd>). Se ve algo así: <code>outlook.office.com/mail/inbox/id/AAQk…</code>
               </li>
               <li>
-                En Mojarrita pegalo con <kbd>Ctrl</kbd>+<kbd>V</kbd> en cualquier parte de la pantalla: te pregunta si querés
-                crear una tarea nueva o sumarlo a una que ya tenés. También podés pegarlo en el detalle de la tarea, en
-                “Mails vinculados”.
+                En Mojarrita pegalo con <kbd>Ctrl</kbd>+<kbd>V</kbd> en cualquier parte de la pantalla: te pregunta si
+                querés crear una tarea nueva o sumarlo a una que ya tenés. También podés pegarlo en el detalle de la
+                tarea, en “Mails vinculados”.
               </li>
             </ol>
           </li>
@@ -56,8 +56,9 @@ export function HelpOutlook() {
               <span className="step-n">2</span> Botón de un clic para la barra de favoritos
             </h3>
             <p>
-              Arrastrá este botón a la barra de favoritos. Con un mail abierto en Outlook web, tocalo y se abre Mojarrita
-              con ese mail listo para vincular. Si antes seleccionás el asunto con el mouse, lo usa como nombre de la tarea.
+              Arrastrá este botón a la barra de favoritos. Con un mail abierto en Outlook web, tocalo y se abre
+              Mojarrita con ese mail listo para vincular. Si antes seleccionás el asunto con el mouse, lo usa como
+              nombre de la tarea.
             </p>
             <div className="bookmarklet-row">
               <a
@@ -90,17 +91,15 @@ export function HelpOutlook() {
             <h3>
               <span className="step-n">3</span> Si usás Outlook de escritorio
             </h3>
-            <p>
-              Ni el Outlook nuevo ni el clásico tienen un “copiar link del mail”. Tenés dos caminos:
-            </p>
+            <p>Ni el Outlook nuevo ni el clásico tienen un “copiar link del mail”. Tenés dos caminos:</p>
             <ul>
               <li>
                 Abrí el mismo mail en Outlook web (misma cuenta) y seguí el paso 1. El link se abre en el navegador.
               </li>
               <li>
-                O guardá solo el <strong>asunto</strong> (y quién lo mandó): escribilo en lugar del link. Con el botón
-                <IconCopy size={13} /> lo copiás y lo pegás en el buscador de Outlook (<kbd>Ctrl</kbd>+<kbd>E</kbd> en el
-                clásico).
+                O guardá solo el <strong>asunto</strong> (y quién lo mandó): escribilo en lugar del link. Con el botón{' '}
+                <IconCopy size={13} /> lo copiás y lo pegás en el buscador de Outlook (<kbd>Ctrl</kbd>+<kbd>E</kbd> en
+                el clásico).
               </li>
             </ul>
           </li>
@@ -113,8 +112,8 @@ export function HelpOutlook() {
               El link funciona con <strong>tu</strong> cuenta: si se lo pasás a otra persona, no va a ver tu mail.
             </li>
             <li>
-              Si movés el mail a otra carpeta o lo archivás, el link puede dejar de andar. Por eso conviene guardar también
-              el asunto.
+              Si movés el mail a otra carpeta o lo archivás, el link puede dejar de andar. Por eso conviene guardar
+              también el asunto.
             </li>
             <li>Si tenés activada la vista de conversación, el link suele abrir el hilo completo.</li>
           </ul>
