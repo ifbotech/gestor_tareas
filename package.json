@@ -9,7 +9,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "build:preview-web": "vite build --mode preview-web --outDir dist-preview"
   },
   "dependencies": {
     "@fontsource-variable/nunito": "^5.3.0",

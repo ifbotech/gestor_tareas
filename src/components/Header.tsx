@@ -5,6 +5,7 @@ import { useUI } from '../store/ui';
 import { dayKey, formatMinutes, startOfDay, todayLong } from '../lib/time';
 import { downloadFile, makeBackup, parseBackup } from '../lib/backup';
 import { Fish, MiniFish } from './Fish';
+import { Modal } from './Modal';
 import { IconBook, IconDots, IconDownload, IconMail, IconUpload } from './Icons';
 
 export function Header() {
@@ -54,6 +55,7 @@ function MoreMenu() {
   const ref = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const toast = useUI((s) => s.toast);
+  const [pending, setPending] = useState<ReturnType<typeof parseBackup> | null>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -82,18 +84,19 @@ function MoreMenu() {
 
   const importBackup = async (file: File) => {
     try {
-      const data = parseBackup(await file.text());
-      const ok = window.confirm(
-        `Esto reemplaza lo que tenés ahora por la copia (${data.tasks.length} tareas, ${data.log.length} en la bitácora). ¿Seguimos?`,
-      );
-      if (!ok) return;
-      useTasks.getState().replaceAll(data);
-      toast('Copia de seguridad restaurada');
+      setPending(parseBackup(await file.text()));
     } catch (err) {
       toast(err instanceof Error ? err.message : 'No pude leer el archivo');
     } finally {
       setOpen(false);
     }
+  };
+
+  const confirmImport = () => {
+    if (!pending) return;
+    useTasks.getState().replaceAll(pending);
+    setPending(null);
+    toast('Copia de seguridad restaurada');
   };
 
   return (
@@ -138,6 +141,29 @@ function MoreMenu() {
           if (f) void importBackup(f);
         }}
       />
+      <Modal
+        open={!!pending}
+        onClose={() => setPending(null)}
+        title="Restaurar copia de seguridad"
+        footer={
+          <>
+            <span className="spacer" />
+            <button type="button" className="btn btn-ghost" onClick={() => setPending(null)}>
+              Cancelar
+            </button>
+            <button type="button" className="btn btn-primary" onClick={confirmImport}>
+              Reemplazar
+            </button>
+          </>
+        }
+      >
+        {pending && (
+          <p>
+            La copia tiene <strong>{pending.tasks.length}</strong> tareas y <strong>{pending.log.length}</strong> en la
+            bitácora. Va a reemplazar todo lo que tenés ahora.
+          </p>
+        )}
+      </Modal>
     </div>
   );
 }

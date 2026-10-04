@@ -2293,7 +2293,7 @@ textarea.log-comment {
 
 @media (max-width: 640px) {
   .app {
-    padding: 14px 14px 180px;
+    padding: 14px 16px 180px;
   }
 
   .brand h1 {
