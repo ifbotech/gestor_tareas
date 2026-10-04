@@ -56,9 +56,9 @@ export function startFishDrag(task: Task, el: HTMLElement, x: number, y: number)
   controller?.startDrag(task, el, x, y);
 }
 
-/** Botón "terminar": la tarea salta sola al balde. */
+/** Botón "terminar": la tarea salta sola al balde (si hay otra en el aire, espera su turno). */
 export function sendToBucket(task: Task, el: HTMLElement | null) {
-  if (controller && el && usePond.getState().phase === 'idle') {
+  if (controller && el) {
     controller.flyToBucket(task, el);
     return;
   }

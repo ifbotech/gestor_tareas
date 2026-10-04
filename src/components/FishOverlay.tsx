@@ -33,6 +33,7 @@ const spring = (stiffness: number, damping: number, mass = 1) => ({
   mass,
 });
 const FOLLOW = spring(900, 55, 0.5);
+const BACK_OUT = [0.34, 1.56, 0.64, 1] as const;
 
 /**
  * La capa donde la tarea se convierte en mojarrita: sigue al puntero, hace burbujas,
@@ -46,6 +47,8 @@ export function FishOverlay() {
   const [waterline, setWaterline] = useState<{ left: number; right: number; y: number } | null>(null);
   const facingRef = useRef<1 | -1>(1);
   const busy = useRef(false);
+  /** Tareas que se mandaron al balde mientras otra mojarrita estaba en el aire: saltan después. */
+  const queue = useRef<Task[]>([]);
 
   const fx = useMotionValue(0);
   const fy = useMotionValue(0);
@@ -85,8 +88,8 @@ export function FishOverlay() {
       setRun({ key: Date.now(), task, origin, start: { x, y } });
       usePond.setState({ draggingId: task.id, phase, bucketHot: false });
       puff(x, y, 6);
-      animate(opacity, 1, { duration: 0.16, delay: 0.08 });
-      return animate(scale, 1, { ...spring(420, 17), delay: 0.08 });
+      animate(opacity, 1, { duration: 0.14, delay: 0.06 });
+      return animate(scale, 1, { duration: 0.3, delay: 0.06, ease: BACK_OUT });
     };
 
     const finish = () => {
@@ -95,6 +98,13 @@ export function FishOverlay() {
       usePond.setState({ draggingId: null, phase: 'idle', bucketHot: false });
       document.body.classList.remove('is-fishing');
       busy.current = false;
+      while (queue.current.length) {
+        const next = queue.current.shift()!;
+        const el = document.querySelector<HTMLElement>(`[data-task-id="${next.id}"]`);
+        if (!el || !useTasks.getState().tasks.some((t) => t.id === next.id)) continue;
+        void flyToBucket(next, el);
+        break;
+      }
     };
 
     /** Se acomoda arriba del balde y se zambulle de cabeza. */
@@ -105,9 +115,10 @@ export function FishOverlay() {
         face(fx.get() <= mouth.x ? 1 : -1);
         const f = facingRef.current;
         await Promise.all([
-          animate(fx, mouth.x, spring(320, 26)),
-          animate(fy, mouth.y - 38, spring(320, 26)),
+          animate(fx, mouth.x, { duration: 0.22, ease: 'easeOut' }),
+          animate(fy, mouth.y - 38, { duration: 0.22, ease: 'easeOut' }),
           animate(rot, -18 * f, { duration: 0.2 }),
+          animate(scale, 1, { duration: 0.2 }),
         ]);
         puff(mouth.x + f * 30, mouth.y - 40, 3);
         const r = bucketRect();
@@ -214,7 +225,10 @@ export function FishOverlay() {
 
     /** Botón "terminar": la mojarrita salta en arco hasta el balde. */
     const flyToBucket = async (task: Task, el: HTMLElement) => {
-      if (busy.current) return;
+      if (busy.current) {
+        if (!queue.current.some((t) => t.id === task.id)) queue.current.push(task);
+        return;
+      }
       busy.current = true;
       const r = el.getBoundingClientRect();
       const sx = r.left + r.width / 2;

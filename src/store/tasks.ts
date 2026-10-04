@@ -150,12 +150,12 @@ export const useTasks = create<TasksState>()(
         const task = get().tasks.find((t) => t.id === id);
         if (!task) return null;
         const snapshot = pause(task, now);
-        const tracked = Math.round(snapshot.trackedMs / 60000);
         const entry: LogEntry = {
           id: uid(),
           task: snapshot,
           completedAt: now,
-          minutes: tracked > 0 ? tracked : null,
+          // Si usó el cronómetro, eso es lo que tardó (como mínimo 1 minuto).
+          minutes: snapshot.trackedMs > 0 ? Math.max(1, Math.round(snapshot.trackedMs / 60000)) : null,
           comment: '',
         };
         set((s) => ({ tasks: s.tasks.filter((t) => t.id !== id), log: [entry, ...s.log] }));
