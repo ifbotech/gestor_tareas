@@ -1,0 +1,128 @@
+import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { useTasks } from '../store/tasks';
+import { useUI } from '../store/ui';
+import { dayKey, formatMinutes, startOfDay, todayLong } from '../lib/time';
+import { downloadFile, makeBackup, parseBackup } from '../lib/backup';
+import { Fish, MiniFish } from './Fish';
+import { IconBook, IconDots, IconDownload, IconMail, IconUpload } from './Icons';
+
+export function Header() {
+  const log = useTasks((s) => s.log);
+  const setLogOpen = useUI((s) => s.setLogOpen);
+  const setHelpOpen = useUI((s) => s.setHelpOpen);
+  const today = startOfDay();
+  const todays = log.filter((e) => e.completedAt >= today);
+  const minutes = todays.reduce((a, e) => a + (e.minutes ?? 0), 0);
+
+  return (
+    <header className="topbar">
+      <div className="brand">
+        <Fish width={64} className="brand-fish" />
+        <div>
+          <h1>Mojarrita</h1>
+          <p className="brand-date">{todayLong()}</p>
+        </div>
+      </div>
+
+      <div className="topbar-actions">
+        <button type="button" className="today-pill" onClick={() => setLogOpen(true)} title="Lo que terminaste hoy">
+          <span className="muted">Hoy</span>
+          <strong>{todays.length}</strong>
+          <MiniFish size={26} />
+          {minutes > 0 && <span className="today-time">{formatMinutes(minutes)}</span>}
+        </button>
+        <button type="button" className="top-btn" onClick={() => setLogOpen(true)}>
+          <IconBook size={17} /> <span className="hide-sm">Bitácora</span>
+        </button>
+        <button type="button" className="top-btn" onClick={() => setHelpOpen(true)} title="Cómo vincular mails de Outlook">
+          <IconMail size={17} /> <span className="hide-sm">Outlook</span>
+        </button>
+        <MoreMenu />
+      </div>
+    </header>
+  );
+}
+
+function MoreMenu() {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const toast = useUI((s) => s.toast);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: PointerEvent) => {
+      if (!ref.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
+    window.addEventListener('pointerdown', onDown);
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('pointerdown', onDown);
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
+
+  const exportBackup = () => {
+    const { tasks, log } = useTasks.getState();
+    downloadFile(`mojarrita-backup-${dayKey(Date.now())}.json`, JSON.stringify(makeBackup(tasks, log), null, 2), 'application/json');
+    setOpen(false);
+    toast('Copia de seguridad descargada');
+  };
+
+  const importBackup = async (file: File) => {
+    try {
+      const data = parseBackup(await file.text());
+      const ok = window.confirm(
+        `Esto reemplaza lo que tenés ahora por la copia (${data.tasks.length} tareas, ${data.log.length} en la bitácora). ¿Seguimos?`,
+      );
+      if (!ok) return;
+      useTasks.getState().replaceAll(data);
+      toast('Copia de seguridad restaurada');
+    } catch (err) {
+      toast(err instanceof Error ? err.message : 'No pude leer el archivo');
+    } finally {
+      setOpen(false);
+    }
+  };
+
+  return (
+    <div className="menu" ref={ref}>
+      <button type="button" className="top-btn top-btn--icon" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-label="Más opciones">
+        <IconDots size={18} />
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="menu-pop"
+            role="menu"
+            initial={{ opacity: 0, y: -6, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -6, scale: 0.97 }}
+            transition={{ duration: 0.14 }}
+          >
+            <p className="menu-note">Tus tareas se guardan en este navegador. Hacé una copia de vez en cuando.</p>
+            <button type="button" role="menuitem" onClick={exportBackup}>
+              <IconDownload size={16} /> Descargar copia de seguridad
+            </button>
+            <button type="button" role="menuitem" onClick={() => fileRef.current?.click()}>
+              <IconUpload size={16} /> Restaurar una copia…
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <input
+        ref={fileRef}
+        type="file"
+        accept="application/json,.json"
+        hidden
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          e.target.value = '';
+          if (f) void importBackup(f);
+        }}
+      />
+    </div>
+  );
+}

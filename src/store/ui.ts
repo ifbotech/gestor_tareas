@@ -1,0 +1,56 @@
+import { create } from 'zustand';
+import type { IncomingMail } from '../lib/mail';
+
+export interface Toast {
+  id: number;
+  text: string;
+  actionLabel?: string;
+  onAction?: () => void;
+}
+
+interface UIState {
+  openTaskId: string | null;
+  logOpen: boolean;
+  helpOpen: boolean;
+  catchEntryId: string | null;
+  incoming: IncomingMail | null;
+  /** Proyecto recién creado: enfocar su campo "agregar subtarea". */
+  focusSubtasksOf: string | null;
+  toasts: Toast[];
+
+  openTask(id: string | null): void;
+  setLogOpen(open: boolean): void;
+  setHelpOpen(open: boolean): void;
+  showCatch(entryId: string | null): void;
+  setIncoming(mail: IncomingMail | null): void;
+  setFocusSubtasksOf(id: string | null): void;
+  toast(text: string, action?: { label: string; run: () => void }): void;
+  dismissToast(id: number): void;
+}
+
+let toastSeq = 0;
+
+export const useUI = create<UIState>()((set, get) => ({
+  openTaskId: null,
+  logOpen: false,
+  helpOpen: false,
+  catchEntryId: null,
+  incoming: null,
+  focusSubtasksOf: null,
+  toasts: [],
+
+  openTask: (id) => set({ openTaskId: id }),
+  setLogOpen: (logOpen) => set({ logOpen }),
+  setHelpOpen: (helpOpen) => set({ helpOpen }),
+  showCatch: (catchEntryId) => set({ catchEntryId }),
+  setIncoming: (incoming) => set({ incoming }),
+  setFocusSubtasksOf: (focusSubtasksOf) => set({ focusSubtasksOf }),
+  toast(text, action) {
+    const id = ++toastSeq;
+    set((s) => ({
+      toasts: [...s.toasts.slice(-2), { id, text, actionLabel: action?.label, onAction: action?.run }],
+    }));
+    window.setTimeout(() => get().dismissToast(id), action ? 6500 : 3800);
+  },
+  dismissToast: (id) => set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) })),
+}));
