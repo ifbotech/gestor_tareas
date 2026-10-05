@@ -20,11 +20,13 @@ export interface Task {
   kind: TaskKind;
   title: string;
   notes: string;
-  /** Índice en la paleta de azules (ver lib/tones). */
+  /** Índice en la paleta de tonos de las tarjetas (ver lib/tones). */
   tone: number;
   createdAt: number;
   mails: MailLink[];
   subtasks: Subtask[];
+  /** Tiempo medido con el cronómetro de la 1.0 (minutos): se propone al soltarla en el balde. */
+  pendingMinutes?: number;
   /** Proyectos: subtareas plegadas. */
   collapsed?: boolean;
 }

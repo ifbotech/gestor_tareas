@@ -63,13 +63,13 @@ export function Bucket() {
 function BucketSvg({ fishCount, hot }: { fishCount: number; hot: boolean }) {
   // Cada pececito nada siempre en su carril dentro del agua.
   const lanes = [
-    { x: 46, y: 62, d: 36, dur: 6.2, delay: 0 },
-    { x: 96, y: 66, d: -34, dur: 7.1, delay: -1.3 },
-    { x: 60, y: 58.5, d: 40, dur: 8.0, delay: -2.6 },
-    { x: 108, y: 60.5, d: -40, dur: 6.6, delay: -3.1 },
-    { x: 52, y: 67, d: 32, dur: 7.6, delay: -0.7 },
-    { x: 112, y: 64, d: -28, dur: 5.8, delay: -2.0 },
-    { x: 72, y: 62, d: 28, dur: 8.6, delay: -4.2 },
+    { x: 46, y: 60.5, d: 36, dur: 6.2, delay: 0 },
+    { x: 96, y: 63.5, d: -34, dur: 7.1, delay: -1.3 },
+    { x: 60, y: 57.5, d: 40, dur: 8.0, delay: -2.6 },
+    { x: 108, y: 59.5, d: -40, dur: 6.6, delay: -3.1 },
+    { x: 54, y: 64, d: 30, dur: 7.6, delay: -0.7 },
+    { x: 110, y: 62.5, d: -28, dur: 5.8, delay: -2.0 },
+    { x: 72, y: 61, d: 28, dur: 8.6, delay: -4.2 },
   ];
   return (
     <svg viewBox="0 0 160 172" className="bucket-svg" aria-hidden="true">
@@ -121,7 +121,7 @@ function BucketSvg({ fishCount, hot }: { fishCount: number; hot: boolean }) {
           <path d="M22 56 L26 156 A54 10 0 0 0 134 156 L138 56 A58 13 0 0 1 22 56 Z" />
         </clipPath>
         <clipPath id="bk-water-clip">
-          <ellipse cx="80" cy="62" rx="53" ry="10" />
+          <ellipse cx="80" cy="60.5" rx="52" ry="8.5" />
         </clipPath>
       </defs>
 
@@ -191,7 +191,7 @@ function BucketSvg({ fishCount, hot }: { fishCount: number; hot: boolean }) {
 
       {/* boca: pared interior, agua y borde enrollado */}
       <ellipse cx="80" cy="56" rx="58" ry="13" fill="url(#bk-inside)" />
-      <ellipse cx="80" cy="62" rx="53" ry="10" fill="url(#bk-water)" />
+      <ellipse cx="80" cy="60.5" rx="52" ry="8.5" fill="url(#bk-water)" />
       <g clipPath="url(#bk-water-clip)">
         {Array.from({ length: fishCount }, (_, i) => {
           const l = lanes[i];
@@ -220,11 +220,11 @@ function BucketSvg({ fishCount, hot }: { fishCount: number; hot: boolean }) {
             </g>
           );
         })}
-        <ellipse cx="64" cy="57.5" rx="22" ry="2.6" fill="#fff" opacity="0.3" />
+        <ellipse cx="64" cy="56.5" rx="22" ry="2.2" fill="#fff" opacity="0.3" />
         {hot && (
           <g className="bucket-ripples">
-            <ellipse cx="80" cy="62" rx="18" ry="3.4" />
-            <ellipse cx="80" cy="62" rx="18" ry="3.4" />
+            <ellipse cx="80" cy="60.5" rx="18" ry="3" />
+            <ellipse cx="80" cy="60.5" rx="18" ry="3" />
           </g>
         )}
       </g>

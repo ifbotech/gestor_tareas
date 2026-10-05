@@ -13,16 +13,6 @@ const base = ({ size = 18, ...rest }: P) => ({
   ...rest,
 });
 
-export const IconPlay = (p: P) => (
-  <svg {...base(p)}>
-    <path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none" />
-  </svg>
-);
-export const IconPause = (p: P) => (
-  <svg {...base(p)}>
-    <path d="M8 5v14M16 5v14" strokeWidth={3.2} />
-  </svg>
-);
 export const IconCheck = (p: P) => (
   <svg {...base(p)}>
     <path d="M5 12.5l4.5 4.5L19 7.5" strokeWidth={3} />
@@ -64,12 +54,6 @@ export const IconBook = (p: P) => (
   <svg {...base(p)}>
     <path d="M4 5.5A2.5 2.5 0 016.5 3H20v15H6.5A2.5 2.5 0 004 20.5z" />
     <path d="M4 20.5A2.5 2.5 0 006.5 23H20v-5" />
-  </svg>
-);
-export const IconHelp = (p: P) => (
-  <svg {...base(p)}>
-    <circle cx="12" cy="12" r="9" />
-    <path d="M9.5 9.5a2.6 2.6 0 015 .8c0 1.7-2.5 2.2-2.5 3.7M12 17.2v.1" />
   </svg>
 );
 export const IconDots = (p: P) => (
@@ -116,21 +100,5 @@ export const IconDownload = (p: P) => (
 export const IconUpload = (p: P) => (
   <svg {...base(p)}>
     <path d="M12 16V5M7 10l5-5 5 5M5 20h14" />
-  </svg>
-);
-export const IconGrip = (p: P) => (
-  <svg {...base(p)} viewBox="0 0 12 24">
-    {[6, 12, 18].map((y) => (
-      <g key={y} fill="currentColor" stroke="none">
-        <circle cx="3.5" cy={y} r="1.5" />
-        <circle cx="8.5" cy={y} r="1.5" />
-      </g>
-    ))}
-  </svg>
-);
-export const IconLink = (p: P) => (
-  <svg {...base(p)}>
-    <path d="M10 14a4.5 4.5 0 006.4 0l3-3a4.5 4.5 0 00-6.4-6.4l-1 1" />
-    <path d="M14 10a4.5 4.5 0 00-6.4 0l-3 3a4.5 4.5 0 006.4 6.4l1-1" />
   </svg>
 );

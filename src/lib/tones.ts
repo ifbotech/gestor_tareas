@@ -1,14 +1,15 @@
 /**
- * Tonos de las tarjetas: verdes y azul verdosos apagados, derivados de Blue Green (#219ebc)
- * y oscurecidos hacia Deep Space Blue (#023047) para que el texto blanco se lea bien (≥ 4.6:1).
+ * Tonos de las tarjetas: verdes salvia y verde agua apagados (calmos para mirar todo el día),
+ * con un par de azul verdosos de la familia de Blue Green. Todos con texto blanco a ≥ 4.75:1.
+ * Los verdes van primero: las tareas nuevas toman los tonos en este orden.
  */
 export const TONES = [
-  { name: 'Laguna', from: '#377e8f', to: '#296b7d' },
-  { name: 'Junco', from: '#487e7a', to: '#366a6d' },
-  { name: 'Río', from: '#327e94', to: '#256a80' },
-  { name: 'Musgo', from: '#4f7d74', to: '#3c6a69' },
-  { name: 'Bruma', from: '#4f7a8e', to: '#3c677c' },
-  { name: 'Hondo', from: '#22647a', to: '#164f63' },
+  { name: 'Junco', from: '#477b72', to: '#3a6760' },
+  { name: 'Musgo', from: '#517b67', to: '#436857' },
+  { name: 'Laguna', from: '#417c7e', to: '#34686a' },
+  { name: 'Salvia', from: '#587963', to: '#496753' },
+  { name: 'Río', from: '#407b87', to: '#346872' },
+  { name: 'Hondo', from: '#306c80', to: '#285969' },
 ] as const;
 
 export type Tone = (typeof TONES)[number];

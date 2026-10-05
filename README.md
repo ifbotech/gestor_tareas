@@ -16,7 +16,7 @@ Todo queda guardado **en tu navegador** (no hay servidor ni cuentas): tus tareas
 
 | Quiero…                     | Hago…                                                                                              |
 | --------------------------- | -------------------------------------------------------------------------------------------------- |
-| Anotar una tarea rápida     | Escribo en “¿Qué hay que hacer?” y Enter.                                                          |
+| Anotar una tarea rápida     | Escribo en “Nueva tarea…” y Enter.                                                                 |
 | Crear un proyecto           | Escribo en “Nuevo proyecto…” y Enter. El cursor salta solo a “Agregar subtarea…”.                  |
 | Agregar subtareas           | Escribo en “Agregar subtarea…” y Enter (se pueden cargar varias seguidas).                         |
 | Tildar / renombrar / borrar | Clic en el círculo / clic en el texto / la ✕ que aparece al pasar el mouse.                        |
@@ -83,7 +83,7 @@ Estructura:
 src/
   components/   Tarjetas, balde, pez (SVG), capa de arrastre, bitácora, ayuda de Outlook…
   store/        tasks.ts (datos que se guardan), pond.ts (estado del arrastre), ui.ts (diálogos y avisos)
-  lib/          tiempos, links de mail, backups/CSV, paleta de azules
+  lib/          tiempos, links de mail, backups/CSV, tonos de las tarjetas
 ```
 
 ## Publicarla (GitHub Pages)

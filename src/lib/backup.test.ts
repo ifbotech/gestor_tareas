@@ -58,3 +58,28 @@ describe('CSV', () => {
     expect(row).toContain('"2026-10-04";"09:05";"Proyecto ""grande""";"Proyecto";"90";"1 h 30 min";"bien";"1/2"');
   });
 });
+
+describe('copias de la 1.0', () => {
+  const t = (over: object) => ({ notes: '', tone: 0, createdAt: 1, mails: [], subtasks: [], ...over });
+  const v1Backup = {
+    app: 'mojarrita',
+    version: 1,
+    tasks: [
+      t({ id: 'a', kind: 'quick', title: 'Tocá ▶ para empezar y medir el tiempo', trackedMs: 0 }),
+      t({ id: 'b', kind: 'quick', title: 'Responder a Juan', trackedMs: 120000 }),
+    ],
+    log: [],
+  };
+
+  it('pasan por la misma limpieza que los datos guardados', () => {
+    const back = parseBackup(JSON.stringify(v1Backup));
+    expect(back.tasks.map((x) => x.title)).toEqual(['Responder a Juan']);
+    expect(back.tasks[0]).not.toHaveProperty('trackedMs');
+    expect(back.tasks[0].pendingMinutes).toBe(2);
+  });
+
+  it('las copias 1.1 quedan tal cual', () => {
+    const back = parseBackup(JSON.stringify({ ...v1Backup, app: 'mis-tareas' }));
+    expect(back.tasks).toHaveLength(2);
+  });
+});

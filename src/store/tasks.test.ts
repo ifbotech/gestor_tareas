@@ -20,6 +20,15 @@ beforeEach(() => {
 });
 
 describe('tareas', () => {
+  it('cada tarea nueva toma el siguiente tono (todos, verdes primero)', () => {
+    for (let i = 0; i < 7; i++) s().addTask(i % 2 ? 'project' : 'quick', `T${i}`);
+    expect(
+      s()
+        .tasks.map((t) => t.tone)
+        .reverse(),
+    ).toEqual([0, 1, 2, 3, 4, 5, 0]);
+  });
+
   it('crea tareas rápidas y proyectos, las nuevas arriba', () => {
     s().addTask('quick', 'Uno');
     s().addTask('project', '  Dos  ');
@@ -132,8 +141,30 @@ describe('migración 1.0 → 1.1', () => {
       expect(t).not.toHaveProperty('trackedMs');
       expect(t).not.toHaveProperty('runningSince');
     }
+    // Lo medido se conserva (el tramo de un cronómetro olvidado prendido días no cuenta).
+    expect(out.tasks[0].pendingMinutes).toBe(2);
+    expect(out.tasks[1]).not.toHaveProperty('pendingMinutes');
+    expect(out.log[0].task).not.toHaveProperty('pendingMinutes');
     expect(out.log[0]).toMatchObject({ minutes: 5, task: { title: 'Vieja' } });
     expect(out.toneCursor).toBe(3);
+  });
+
+  it('el tiempo medido en la 1.0 aparece al soltar la tarea en el balde', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(10 * 60_000);
+    const out = migrate(
+      {
+        toneCursor: 0,
+        log: [],
+        tasks: [{ ...base, id: 'z', kind: 'quick', title: 'Con tiempo', trackedMs: 30 * 60_000, runningSince: 0 }],
+      } as never,
+      1,
+    );
+    expect(out.tasks[0].pendingMinutes).toBe(40); // 30 acumulados + 10 corriendo
+    useTasks.setState({ tasks: out.tasks, log: [] });
+    s().completeTask('z');
+    expect(s().log[0].minutes).toBe(40);
+    expect(s().log[0].task).not.toHaveProperty('pendingMinutes');
   });
 
   it('no toca datos que ya son 1.1', () => {

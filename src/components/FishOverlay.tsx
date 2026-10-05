@@ -55,7 +55,6 @@ export function FishOverlay() {
   const opacity = useMotionValue(0);
   const left = useTransform(fx, (v) => v - FISH_W / 2);
   const top = useTransform(fy, (v) => v - FISH_H / 2);
-  const tagTop = useTransform(fy, (v) => v + FISH_H / 2 - 2);
 
   useEffect(() => {
     const face = (f: 1 | -1) => {
@@ -243,7 +242,9 @@ export function FishOverlay() {
           }}
           transition={{ duration: 0.32, ease: [0.4, 0, 0.2, 1] }}
         >
-          <span>{run.task.title}</span>
+          <motion.span initial={{ opacity: 1 }} animate={{ opacity: 0 }} transition={{ duration: 0.1 }}>
+            {run.task.title}
+          </motion.span>
         </motion.div>
       )}
 
@@ -275,11 +276,6 @@ export function FishOverlay() {
               <Fish width={FISH_W} />
             </motion.div>
           </motion.div>
-          {!waterline && (
-            <motion.div className="fish-tag" style={{ x: fx, y: tagTop, opacity }}>
-              <span>{run.task.title}</span>
-            </motion.div>
-          )}
         </div>
       )}
     </div>

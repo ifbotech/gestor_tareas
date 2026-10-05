@@ -1,5 +1,6 @@
 import type { LogEntry, Task } from '../types';
 import { dayKey, formatMinutes, formatTime } from './time';
+import { cleanupV1 } from './migrate';
 
 export interface Backup {
   app: 'mis-tareas';
@@ -60,7 +61,8 @@ export function parseBackup(text: string): { tasks: Task[]; log: LogEntry[] } {
       minutes: typeof e.minutes === 'number' ? e.minutes : null,
       comment: typeof e.comment === 'string' ? e.comment : '',
     }));
-  return { tasks, log };
+  // Las copias de la 1.0 (cuando la app se llamaba "Mojarrita") pasan por la misma limpieza que los datos guardados.
+  return data.app === 'mis-tareas' ? { tasks, log } : cleanupV1({ tasks, log });
 }
 
 function normalizeTask(t: Task): Task {

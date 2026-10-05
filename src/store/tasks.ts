@@ -3,40 +3,17 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import type { LogEntry, MailLink, Task, TaskKind } from '../types';
 import { uid } from '../lib/id';
 import { TONES } from '../lib/tones';
+import { cleanupV1 } from '../lib/migrate';
 
 /** Nombre interno de cuando la app se llamaba "Mojarrita": se mantiene para no perder lo guardado. */
 export const STORAGE_KEY = 'mojarrita:v1';
 
 type PersistedState = Pick<TasksState, 'tasks' | 'log' | 'toneCursor'>;
 
-/** Tareas de ejemplo que traía la 1.0 la primera vez: si siguen tal cual, se sacan. */
-const V1_EXAMPLES = {
-  quick: ['Tocá ▶ para empezar y medir el tiempo', 'Arrastrame al balde gris cuando termines 🐟'],
-  project: 'Mi primer proyecto',
-  subtasks: ['Tildá esta subtarea', 'Agregá otra subtarea acá abajo', 'Cuando esté todo, tirá el proyecto al balde'],
-};
-
-const isUntouchedExample = (t: Task) =>
-  !t.notes &&
-  t.mails.length === 0 &&
-  ((t.kind === 'quick' && V1_EXAMPLES.quick.includes(t.title)) ||
-    (t.kind === 'project' &&
-      t.title === V1_EXAMPLES.project &&
-      t.subtasks.length === V1_EXAMPLES.subtasks.length &&
-      t.subtasks.every((st, i) => st.title === V1_EXAMPLES.subtasks[i])));
-
-/** 1.0 → 1.1: sin cronómetro y sin las tareas-tutorial de ejemplo. */
+/** Datos guardados por versiones anteriores → formato actual. */
 export function migrate(state: PersistedState, version: number): PersistedState {
   if (version >= 2 || !state) return state;
-  const strip = (t: Task): Task => {
-    const { trackedMs: _t, runningSince: _r, ...rest } = t as Task & { trackedMs?: number; runningSince?: number };
-    return rest;
-  };
-  return {
-    ...state,
-    tasks: (state.tasks ?? []).filter((t) => !isUntouchedExample(t)).map(strip),
-    log: (state.log ?? []).map((e) => ({ ...e, task: strip(e.task) })),
-  };
+  return cleanupV1(state);
 }
 
 export interface TasksState {
@@ -83,8 +60,8 @@ export const useTasks = create<TasksState>()(
           kind,
           title: title.trim() || (kind === 'project' ? 'Proyecto sin nombre' : 'Tarea sin nombre'),
           notes: '',
-          // Los proyectos arrancan en los azules más profundos.
-          tone: kind === 'project' ? (cursor * 2 + 2) % TONES.length : (cursor * 2) % TONES.length,
+          // Cada tarea nueva toma el siguiente tono de la paleta (los verdes vienen primero).
+          tone: cursor % TONES.length,
           createdAt: Date.now(),
           mails: [],
           subtasks: [],
@@ -158,7 +135,15 @@ export const useTasks = create<TasksState>()(
       completeTask(id) {
         const task = get().tasks.find((t) => t.id === id);
         if (!task) return null;
-        const entry: LogEntry = { id: uid(), task, completedAt: Date.now(), minutes: null, comment: '' };
+        const { pendingMinutes, ...done } = task;
+        const entry: LogEntry = {
+          id: uid(),
+          task: done,
+          completedAt: Date.now(),
+          // Tiempo que había medido el cronómetro de la 1.0, si quedó alguno.
+          minutes: pendingMinutes ?? null,
+          comment: '',
+        };
         set((s) => ({ tasks: s.tasks.filter((t) => t.id !== id), log: [entry, ...s.log] }));
         return entry.id;
       },

@@ -1,4 +1,4 @@
-name: Publicar Mojarrita
+name: Publicar Mis tareas
 
 on:
   push:

@@ -10,29 +10,43 @@ export function formatMinutes(min: number | null | undefined): string {
   return r ? `${h} h ${r} min` : `${h} h`;
 }
 
-const RANGE =
-  /^(?:de\s+)?(\d{1,2})(?:[:.h](\d{2}))?\s*(?:hs?\.?\s*)?(?:a|-|–|hasta)\s*(\d{1,2})(?:[:.h](\d{2}))?\s*(?:hs?\.?)?$/;
+// Una hora del día: "9", "9:30", "9.30", "9h30", "9 y media", "9 y cuarto", con "hs" opcional.
+const CLOCK = String.raw`(\d{1,2})(?:(?:[:.]|h)(\d{2})|\s*y\s*(media|cuarto))?\s*(?:hs?\.?)?`;
+const RANGE = new RegExp(String.raw`^(?:(de|desde)\s+(?:las?\s+)?)?${CLOCK}\s*(a|-|–|hasta)\s*(?:las?\s+)?${CLOCK}$`);
+
+const clockMinutes = (h: string, m?: string, extra?: string) =>
+  Number(h) * 60 + (m ? Number(m) : extra === 'media' ? 30 : extra === 'cuarto' ? 15 : 0);
+
+/** Horario "de 9 a 10:30" → minutos. null si no es un horario claro. */
+function rangeMinutes(m: RegExpMatchArray): number | null {
+  const [, prefix, h1, m1, x1, sep, h2, m2, x2] = m;
+  // "5-10" o "2-3 h" son ambiguos (¿minutos? ¿horas?): solo es horario si se nota que lo es.
+  const looksLikeClock = !!prefix || sep === 'a' || sep === 'hasta' || !!(m1 || x1 || m2 || x2);
+  if (!looksLikeClock) return null;
+  if (Number(h1) > 23 || Number(h2) > 24 || Number(m1 ?? 0) > 59 || Number(m2 ?? 0) > 59) return null;
+  const from = clockMinutes(h1, m1, x1);
+  let to = clockMinutes(h2, m2, x2);
+  // "de 11 a 1" cruza el mediodía: se lee como de 11 a 13, solo si da algo razonable (hasta 6 h).
+  const wraps = to <= from && Number(h2) <= 12;
+  if (wraps) to += 12 * 60;
+  const total = to - from;
+  return total > 0 && total <= (wraps ? 6 : 12) * 60 ? total : null;
+}
 
 /**
  * Interpreta lo que uno escribe para "cuánto tardé":
  * "45", "45m", "45 min", "1h", "1 h 30", "1h30m", "1:30", "1.5h", "1,5 hs", "2 horas 10 minutos",
- * o un horario: "de 9 a 10:30", "9:15-11", "14 a 15.30".
+ * o un horario: "de 9 a 10:30", "9:15-11", "14 a 15.30", "de 11 a 1", "desde las 9 hasta las 10 y media".
  * Devuelve minutos, o null si no se entiende.
  */
 export function parseDuration(input: string): number | null {
-  const raw = input.trim().toLowerCase();
+  const raw = input.trim().toLowerCase().replace(/,/g, '.');
   if (!raw) return null;
 
   const range = raw.match(RANGE);
-  if (range) {
-    const [, h1, m1 = '0', h2, m2 = '0'] = range;
-    const from = Number(h1) * 60 + Number(m1);
-    const to = Number(h2) * 60 + Number(m2);
-    if (Number(h1) > 23 || Number(h2) > 24 || Number(m1) > 59 || Number(m2) > 59 || to <= from) return null;
-    return to - from;
-  }
+  if (range) return rangeMinutes(range);
 
-  const s = raw.replace(/,/g, '.');
+  const s = raw;
 
   const clock = s.match(/^(\d+):(\d{1,2})$/);
   if (clock) return Number(clock[1]) * 60 + Number(clock[2]);

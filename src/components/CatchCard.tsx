@@ -96,6 +96,9 @@ function CatchCardBody({ entryId, onClose }: { entryId: string; onClose(): void 
           inputMode="text"
         />
         {invalid && <p className="hint hint--warn">No entendí. Probá con “45 min”, “1h 30” o “de 9 a 10:30”.</p>}
+        {parsed != null && text.trim() !== formatMinutes(parsed) && (
+          <p className="hint muted">Se guarda: {formatMinutes(parsed)}</p>
+        )}
         <div className="chips">
           {QUICK.map((m) => (
             <button

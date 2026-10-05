@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTasks } from '../store/tasks';
 import { useUI } from '../store/ui';
 import { TONES } from '../lib/tones';
@@ -92,16 +92,7 @@ export function TaskDetail() {
     >
       {task && (
         <div className="detail">
-          <input
-            className="detail-title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            onBlur={commitTitle}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
-            }}
-            aria-label="Nombre de la tarea"
-          />
+          <AutoTitle value={title} onChange={setTitle} onCommit={commitTitle} />
           <p className="detail-meta">
             Creada el {todayLong(task.createdAt).toLowerCase()}, {formatTime(task.createdAt)} h
           </p>
@@ -170,5 +161,33 @@ export function TaskDetail() {
         </div>
       )}
     </Modal>
+  );
+}
+
+/** Nombre de la tarea: una sola "línea" lógica (Enter guarda) que crece para mostrar nombres largos completos. */
+function AutoTitle({ value, onChange, onCommit }: { value: string; onChange(v: string): void; onCommit(): void }) {
+  const ref = useRef<HTMLTextAreaElement>(null);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${el.scrollHeight}px`;
+  }, [value]);
+  return (
+    <textarea
+      ref={ref}
+      className="detail-title"
+      rows={1}
+      value={value}
+      onChange={(e) => onChange(e.target.value.replace(/\n/g, ' '))}
+      onBlur={onCommit}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          e.currentTarget.blur();
+        }
+      }}
+      aria-label="Nombre de la tarea"
+    />
   );
 }

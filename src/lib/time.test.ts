@@ -24,16 +24,36 @@ describe('parseDuration', () => {
     ['14 a 15.30', 90],
     ['de 9hs a 10hs', 60],
     ['10 hasta 12', 120],
+    ['14,30 a 15', 30],
+    ['9h30 a 11', 90],
+    ['de 11 a 1', 120],
+    ['de 12 a 2', 120],
+    ['de 9 a 10 y media', 90],
+    ['9 y cuarto a 10', 45],
+    ['desde las 9 hasta las 10', 60],
   ])('"%s" → %i minutos', (input, expected) => {
     expect(parseDuration(input)).toBe(expected);
   });
 
-  it.each(['', 'un rato', 'media hora', '1 hora y media', 'abc 10', 'de 11 a 9', 'de 25 a 26', '9:70 a 10'])(
-    '"%s" no se entiende',
-    (input) => {
-      expect(parseDuration(input)).toBeNull();
-    },
-  );
+  it.each([
+    '',
+    'un rato',
+    'media hora',
+    '1 hora y media',
+    'abc 10',
+    'de 25 a 26',
+    '9:70 a 10',
+    // rangos ambiguos: mejor preguntar que guardar algo mal
+    '5-10',
+    '10-15',
+    '1-2',
+    '2-3 h',
+    '45-50 min',
+    // cruzar el mediodía solo si da algo razonable
+    'de 4 a 2',
+  ])('"%s" no se entiende', (input) => {
+    expect(parseDuration(input)).toBeNull();
+  });
 
   it('lo que muestra formatMinutes se vuelve a entender', () => {
     for (const m of [5, 45, 60, 75, 90, 120, 135, 600]) expect(parseDuration(formatMinutes(m))).toBe(m);

@@ -51,6 +51,8 @@ interface FrondSpec {
 }
 
 const POINTS = 22;
+/** Cuadros por ciclo: con muchos y lineal, la onda avanza a velocidad pareja, sin frenarse. */
+const FRAMES = 20;
 const VIEW_H = 320;
 
 /**
@@ -96,7 +98,7 @@ function Seaweed({ side }: { side: 'left' | 'right' }) {
     () =>
       CLUMPS[side].map((f) => ({
         ...f,
-        frames: [0, 0.25, 0.5, 0.75].map((t) => frondPath(f, t)),
+        frames: Array.from({ length: FRAMES }, (_, i) => frondPath(f, i / FRAMES)),
       })),
     [side],
   );
@@ -110,9 +112,7 @@ function Seaweed({ side }: { side: 'left' | 'right' }) {
               dur={`${f.duration}s`}
               repeatCount="indefinite"
               values={[...f.frames, f.frames[0]].join(';')}
-              keyTimes="0;0.25;0.5;0.75;1"
-              calcMode="spline"
-              keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+              calcMode="linear"
             />
           )}
         </path>
