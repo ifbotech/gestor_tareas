@@ -19,9 +19,9 @@ export function Header() {
   return (
     <header className="topbar">
       <div className="brand">
-        <Fish width={64} className="brand-fish" />
+        <Fish width={78} className="brand-fish" />
         <div>
-          <h1>Mojarrita</h1>
+          <h1>Mis tareas</h1>
           <p className="brand-date">{todayLong()}</p>
         </div>
       </div>
@@ -74,7 +74,7 @@ function MoreMenu() {
   const exportBackup = () => {
     const { tasks, log } = useTasks.getState();
     downloadFile(
-      `mojarrita-backup-${dayKey(Date.now())}.json`,
+      `mis-tareas-backup-${dayKey(Date.now())}.json`,
       JSON.stringify(makeBackup(tasks, log), null, 2),
       'application/json',
     );
@@ -127,6 +127,7 @@ function MoreMenu() {
             <button type="button" role="menuitem" onClick={() => fileRef.current?.click()}>
               <IconUpload size={16} /> Restaurar una copia…
             </button>
+            <p className="menu-version">Mis tareas · versión {__APP_VERSION__}</p>
           </motion.div>
         )}
       </AnimatePresence>

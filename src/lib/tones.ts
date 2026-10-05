@@ -1,11 +1,14 @@
-/** Azules para las tarjetas: todos más profundos que el celeste del fondo y con buen contraste para texto blanco. */
+/**
+ * Tonos de las tarjetas: verdes y azul verdosos apagados, derivados de Blue Green (#219ebc)
+ * y oscurecidos hacia Deep Space Blue (#023047) para que el texto blanco se lea bien (≥ 4.6:1).
+ */
 export const TONES = [
-  { name: 'Mar', from: '#3b9be3', to: '#1d6fbd' },
-  { name: 'Laguna', from: '#27a0c8', to: '#136f98' },
-  { name: 'Profundo', from: '#3480e0', to: '#1c52ac' },
-  { name: 'Índigo', from: '#5b7cf0', to: '#3349bd' },
-  { name: 'Río', from: '#3a8bcc', to: '#225b98' },
-  { name: 'Noche', from: '#2e62b3', to: '#173c7c' },
+  { name: 'Laguna', from: '#377e8f', to: '#296b7d' },
+  { name: 'Junco', from: '#487e7a', to: '#366a6d' },
+  { name: 'Río', from: '#327e94', to: '#256a80' },
+  { name: 'Musgo', from: '#4f7d74', to: '#3c6a69' },
+  { name: 'Bruma', from: '#4f7a8e', to: '#3c677c' },
+  { name: 'Hondo', from: '#22647a', to: '#164f63' },
 ] as const;
 
 export type Tone = (typeof TONES)[number];

@@ -64,7 +64,7 @@ export function mailTitle(m: MailLink): string {
 
 /**
  * Botón para la barra de favoritos: estando en Outlook web con un mail abierto,
- * abre Mojarrita con el link (y el asunto, si lo encuentra) listo para crear o vincular una tarea.
+ * abre Mis tareas con el link (y el asunto, si lo encuentra) listo para crear o vincular una tarea.
  */
 export function buildBookmarklet(appUrl: string): string {
   const app = JSON.stringify(appUrl.split('#')[0]);
@@ -75,7 +75,7 @@ export function buildBookmarklet(appUrl: string): string {
     `||q('[role=main] [role=heading][aria-level="2"]')` +
     `||q('#ReadingPaneContainerId [role=heading]')` +
     `||q('[role=main] [role=heading]');` +
-    `window.open(${app}+'#vincular?url='+encodeURIComponent(location.href)+'&asunto='+encodeURIComponent(s.slice(0,200)),'mojarrita');` +
+    `window.open(${app}+'#vincular?url='+encodeURIComponent(location.href)+'&asunto='+encodeURIComponent(s.slice(0,200)),'mis-tareas');` +
     `})();`;
   return `javascript:${code}`;
 }

@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { animate, motion, useMotionValue, useTransform } from 'motion/react';
 import type { Task } from '../types';
-import { Fish } from './Fish';
+import { Fish, FISH_RATIO } from './Fish';
 import { bucketMouth, bucketRect, isOverBucket, registerPondController, usePond } from '../store/pond';
 import { useTasks } from '../store/tasks';
 import { useUI } from '../store/ui';
 import { toneStyle } from '../lib/tones';
 
-const FISH_W = 104;
-const FISH_H = FISH_W / 2;
+const FISH_W = 124;
+const FISH_H = FISH_W / FISH_RATIO;
 
 interface Run {
   key: number;
@@ -36,7 +36,7 @@ const FOLLOW = spring(900, 55, 0.5);
 const BACK_OUT = [0.34, 1.56, 0.64, 1] as const;
 
 /**
- * La capa donde la tarea se convierte en mojarrita: sigue al puntero, hace burbujas,
+ * La capa donde la tarea se convierte en mojarrita al arrastrarla: sigue al puntero, hace burbujas,
  * se zambulle en el balde (y la tarea pasa a la bitácora) o vuelve nadando a su lugar.
  */
 export function FishOverlay() {
@@ -47,8 +47,6 @@ export function FishOverlay() {
   const [waterline, setWaterline] = useState<{ left: number; right: number; y: number } | null>(null);
   const facingRef = useRef<1 | -1>(1);
   const busy = useRef(false);
-  /** Tareas que se mandaron al balde mientras otra mojarrita estaba en el aire: saltan después. */
-  const queue = useRef<Task[]>([]);
 
   const fx = useMotionValue(0);
   const fy = useMotionValue(0);
@@ -76,7 +74,7 @@ export function FishOverlay() {
       setBubbles((b) => [...b.slice(-20), ...fresh]);
     };
 
-    const appear = (task: Task, el: HTMLElement, x: number, y: number, phase: 'dragging' | 'flying') => {
+    const appear = (task: Task, el: HTMLElement, x: number, y: number) => {
       const origin = el.getBoundingClientRect();
       fx.jump(x);
       fy.jump(y);
@@ -86,7 +84,7 @@ export function FishOverlay() {
       facingRef.current = 1;
       setFacing(1);
       setRun({ key: Date.now(), task, origin, start: { x, y } });
-      usePond.setState({ draggingId: task.id, phase, bucketHot: false });
+      usePond.setState({ draggingId: task.id, phase: 'dragging', bucketHot: false });
       puff(x, y, 6);
       animate(opacity, 1, { duration: 0.14, delay: 0.06 });
       return animate(scale, 1, { duration: 0.3, delay: 0.06, ease: BACK_OUT });
@@ -98,13 +96,6 @@ export function FishOverlay() {
       usePond.setState({ draggingId: null, phase: 'idle', bucketHot: false });
       document.body.classList.remove('is-fishing');
       busy.current = false;
-      while (queue.current.length) {
-        const next = queue.current.shift()!;
-        const el = document.querySelector<HTMLElement>(`[data-task-id="${next.id}"]`);
-        if (!el || !useTasks.getState().tasks.some((t) => t.id === next.id)) continue;
-        void flyToBucket(next, el);
-        break;
-      }
     };
 
     /** Se acomoda arriba del balde y se zambulle de cabeza. */
@@ -158,7 +149,7 @@ export function FishOverlay() {
       if (busy.current) return;
       busy.current = true;
       document.body.classList.add('is-fishing');
-      void appear(task, el, x, y, 'dragging');
+      void appear(task, el, x, y);
       const origin = el.getBoundingClientRect();
 
       let lastX = x;
@@ -223,38 +214,7 @@ export function FishOverlay() {
       window.addEventListener('blur', onBlur);
     };
 
-    /** Botón "terminar": la mojarrita salta en arco hasta el balde. */
-    const flyToBucket = async (task: Task, el: HTMLElement) => {
-      if (busy.current) {
-        if (!queue.current.some((t) => t.id === task.id)) queue.current.push(task);
-        return;
-      }
-      busy.current = true;
-      const r = el.getBoundingClientRect();
-      const sx = r.left + r.width / 2;
-      const sy = r.top + Math.min(r.height / 2, 48);
-      await appear(task, el, sx, sy, 'flying');
-      const mouth = bucketMouth();
-      if (!mouth) {
-        await dive(task);
-        return;
-      }
-      const f: 1 | -1 = mouth.x >= sx ? 1 : -1;
-      face(f);
-      const ex = mouth.x;
-      const ey = mouth.y - 38;
-      const peak = Math.max(36, Math.min(sy, ey) - 140);
-      const trail = window.setInterval(() => puff(fx.get() - f * FISH_W * 0.45, fy.get()), 70);
-      await Promise.all([
-        animate(fx, [sx, ex], { duration: 0.85, ease: 'linear' }),
-        animate(fy, [sy, peak, ey], { duration: 0.85, times: [0, 0.42, 1], ease: ['easeOut', 'easeIn'] }),
-        animate(rot, [-32 * f, 0, 30 * f], { duration: 0.85 }),
-      ]);
-      window.clearInterval(trail);
-      await dive(task);
-    };
-
-    registerPondController({ startDrag, flyToBucket });
+    registerPondController({ startDrag });
     return () => registerPondController(null);
   }, [fx, fy, rot, scale, opacity]);
 

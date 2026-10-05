@@ -14,7 +14,6 @@ const task: Task = {
     { id: 's1', title: 'a', done: true },
     { id: 's2', title: 'b', done: false },
   ],
-  trackedMs: 0,
 };
 const entry: LogEntry = {
   id: 'e1',
@@ -34,7 +33,7 @@ describe('backup', () => {
 
   it('rechaza archivos que no son backups', () => {
     expect(() => parseBackup('hola')).toThrow(/JSON/);
-    expect(() => parseBackup('{"a":1}')).toThrow(/backup/);
+    expect(() => parseBackup('{"a":1}')).toThrow(/copia de Mis tareas/);
   });
 
   it('descarta elementos rotos y completa campos faltantes', () => {
@@ -45,7 +44,7 @@ describe('backup', () => {
       }),
     );
     expect(back.tasks).toHaveLength(1);
-    expect(back.tasks[0]).toMatchObject({ notes: '', tone: 0, trackedMs: 0 });
+    expect(back.tasks[0]).toMatchObject({ notes: '', tone: 0 });
     expect(back.log).toHaveLength(0);
   });
 });

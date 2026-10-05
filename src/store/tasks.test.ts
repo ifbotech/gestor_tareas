@@ -11,7 +11,7 @@ vi.stubGlobal('localStorage', {
   length: 0,
 });
 
-const { useTasks, STORAGE_KEY } = await import('./tasks');
+const { useTasks, STORAGE_KEY, migrate } = await import('./tasks');
 const s = () => useTasks.getState();
 
 beforeEach(() => {
@@ -55,43 +55,16 @@ describe('tareas', () => {
     s().removeMail(id, s().tasks[0].mails[0].id);
     expect(s().tasks[0].mails).toHaveLength(1);
   });
-
-  it('cronómetro: una tarea a la vez', () => {
-    vi.useFakeTimers();
-    vi.setSystemTime(1_000_000);
-    const a = s().addTask('quick', 'A');
-    const b = s().addTask('quick', 'B');
-    s().startTimer(a);
-    vi.setSystemTime(1_000_000 + 60_000);
-    s().startTimer(b);
-    const ta = s().tasks.find((t) => t.id === a)!;
-    const tb = s().tasks.find((t) => t.id === b)!;
-    expect(ta.runningSince).toBeUndefined();
-    expect(ta.trackedMs).toBe(60_000);
-    expect(tb.runningSince).toBe(1_060_000);
-  });
 });
 
 describe('balde y bitácora', () => {
-  it('terminar pasa la tarea a la bitácora con el tiempo medido', () => {
+  it('terminar pasa la tarea a la bitácora y el tiempo queda para cargar', () => {
     vi.useFakeTimers();
-    vi.setSystemTime(0);
-    const id = s().addTask('quick', 'Informe');
-    s().startTimer(id);
-    vi.setSystemTime(25 * 60_000);
+    vi.setSystemTime(1_234_000);
+    const id = s().addTask('quick', 'X');
     const entryId = s().completeTask(id)!;
     expect(s().tasks).toHaveLength(0);
-    const entry = s().log[0];
-    expect(entry.id).toBe(entryId);
-    expect(entry.minutes).toBe(25);
-    expect(entry.task.runningSince).toBeUndefined();
-    expect(entry.completedAt).toBe(25 * 60_000);
-  });
-
-  it('sin cronómetro, el tiempo queda para cargar', () => {
-    const id = s().addTask('quick', 'X');
-    s().completeTask(id);
-    expect(s().log[0].minutes).toBeNull();
+    expect(s().log[0]).toMatchObject({ id: entryId, completedAt: 1_234_000, minutes: null, comment: '' });
     s().updateLog(s().log[0].id, { minutes: 40, comment: 'ok' });
     expect(s().log[0]).toMatchObject({ minutes: 40, comment: 'ok' });
   });
@@ -115,5 +88,56 @@ describe('balde y bitácora', () => {
     s().addTask('quick', 'Persistida');
     const saved = JSON.parse(mem.get(STORAGE_KEY)!);
     expect(saved.state.tasks[0].title).toBe('Persistida');
+  });
+});
+
+describe('migración 1.0 → 1.1', () => {
+  const base = { notes: '', tone: 0, createdAt: 1, mails: [], subtasks: [] };
+  const v1 = {
+    toneCursor: 3,
+    tasks: [
+      { ...base, id: 'a', kind: 'quick', title: 'Tocá ▶ para empezar y medir el tiempo', trackedMs: 0 },
+      { ...base, id: 'b', kind: 'quick', title: 'Arrastrame al balde gris cuando termines 🐟', trackedMs: 0 },
+      {
+        ...base,
+        id: 'c',
+        kind: 'project',
+        title: 'Mi primer proyecto',
+        trackedMs: 0,
+        subtasks: [
+          { id: '1', title: 'Tildá esta subtarea', done: true },
+          { id: '2', title: 'Agregá otra subtarea acá abajo', done: false },
+          { id: '3', title: 'Cuando esté todo, tirá el proyecto al balde', done: false },
+        ],
+      },
+      { ...base, id: 'd', kind: 'quick', title: 'Responder a Juan', trackedMs: 120000, runningSince: 5 },
+      // Ejemplo que el usuario modificó (le agregó notas): se queda.
+      { ...base, id: 'e', kind: 'quick', title: 'Tocá ▶ para empezar y medir el tiempo', notes: 'mío', trackedMs: 0 },
+    ],
+    log: [
+      {
+        id: 'l',
+        completedAt: 1,
+        minutes: 5,
+        comment: '',
+        task: { ...base, id: 'x', kind: 'quick', title: 'Vieja', trackedMs: 300000 },
+      },
+    ],
+  };
+
+  it('saca las tareas-tutorial intactas y los campos del cronómetro', () => {
+    const out = migrate(v1 as never, 1);
+    expect(out.tasks.map((t) => t.id)).toEqual(['d', 'e']);
+    for (const t of [...out.tasks, ...out.log.map((e) => e.task)]) {
+      expect(t).not.toHaveProperty('trackedMs');
+      expect(t).not.toHaveProperty('runningSince');
+    }
+    expect(out.log[0]).toMatchObject({ minutes: 5, task: { title: 'Vieja' } });
+    expect(out.toneCursor).toBe(3);
+  });
+
+  it('no toca datos que ya son 1.1', () => {
+    const state = { tasks: [], log: [], toneCursor: 0 };
+    expect(migrate(state, 2)).toBe(state);
   });
 });

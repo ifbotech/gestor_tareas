@@ -1,14 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTasks } from '../store/tasks';
 import { useUI } from '../store/ui';
-import { sendToBucket } from '../store/pond';
 import { TONES } from '../lib/tones';
 import { formatTime, todayLong } from '../lib/time';
 import { Modal } from './Modal';
-import { TimerButton } from './TimerButton';
 import { SubtaskList } from './SubtaskList';
 import { MailAddForm, MailChips } from './MailLinks';
-import { IconCheck, IconTrash } from './Icons';
+import { IconTrash } from './Icons';
 
 /** Detalle de una tarea: nombre, tipo, color, notas, mails y subtareas. Todo se guarda solo. */
 export function TaskDetail() {
@@ -84,12 +82,9 @@ export function TaskDetail() {
               onClick={() => {
                 commitTitle();
                 close();
-                const el = document.querySelector<HTMLElement>(`[data-task-id="${task.id}"]`);
-                // Esperamos a que cierre el diálogo para que se vea el salto al balde.
-                window.setTimeout(() => sendToBucket(task, el), 220);
               }}
             >
-              <IconCheck size={16} /> Terminada: al balde
+              Listo
             </button>
           </>
         )
@@ -147,7 +142,6 @@ export function TaskDetail() {
                 />
               ))}
             </div>
-            <TimerButton task={task} large />
           </div>
 
           {task.kind === 'project' && (

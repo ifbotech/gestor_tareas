@@ -1,14 +1,13 @@
 import { motion } from 'motion/react';
 import type { Task } from '../types';
 import { useFishDrag } from '../hooks/useFishDrag';
-import { sendToBucket, usePond } from '../store/pond';
+import { usePond } from '../store/pond';
 import { useTasks } from '../store/tasks';
 import { useUI } from '../store/ui';
 import { toneStyle } from '../lib/tones';
 import { mailTitle } from '../lib/mail';
-import { TimerButton } from './TimerButton';
 import { SubtaskList } from './SubtaskList';
-import { IconCheck, IconChevron, IconGrip, IconMail, IconNote } from './Icons';
+import { IconChevron, IconMail, IconNote } from './Icons';
 
 const cardMotion = (swimming: boolean) => ({
   layout: true,
@@ -54,20 +53,18 @@ function MailBadge({ task }: { task: Task }) {
   );
 }
 
-function DoneButton({ task, cardRef }: { task: Task; cardRef: React.RefObject<HTMLElement | null> }) {
+/** Mail y notas, solo si la tarea los tiene. */
+function CardBadges({ task }: { task: Task }) {
+  if (!task.mails.length && !task.notes) return null;
   return (
-    <button
-      type="button"
-      className="done-btn"
-      onClick={(e) => {
-        e.stopPropagation();
-        sendToBucket(task, cardRef.current);
-      }}
-      title="¡Terminada! Mandarla al balde"
-      aria-label={`Terminar "${task.title}" y mandarla al balde`}
-    >
-      <IconCheck size={18} />
-    </button>
+    <div className="card-badges">
+      <MailBadge task={task} />
+      {task.notes && (
+        <span className="card-badge card-badge--static" title={task.notes}>
+          <IconNote size={15} />
+        </span>
+      )}
+    </div>
   );
 }
 
@@ -76,7 +73,6 @@ function useCardProps(task: Task) {
   const swimming = usePond((s) => s.draggingId === task.id);
   const openTask = useUI((s) => s.openTask);
   return {
-    drag,
     swimming,
     props: {
       ref: drag.ref,
@@ -95,37 +91,24 @@ function useCardProps(task: Task) {
 }
 
 export function QuickCard({ task }: { task: Task }) {
-  const { drag, swimming, props } = useCardProps(task);
+  const { swimming, props } = useCardProps(task);
   return (
     <motion.article
       {...cardMotion(swimming)}
       {...props}
-      className={`card card--quick ${swimming ? 'is-swimming' : ''} ${task.runningSince ? 'is-running' : ''}`}
+      className={`card card--quick ${swimming ? 'is-swimming' : ''}`}
       aria-label={`Tarea: ${task.title}`}
     >
       <div className="card-head">
-        <span className="grip" title="Arrastrala al balde cuando la termines">
-          <IconGrip size={16} />
-        </span>
         <h3 className="card-title">{task.title}</h3>
-      </div>
-      <div className="card-actions">
-        <TimerButton task={task} />
-        <MailBadge task={task} />
-        {task.notes && (
-          <span className="card-badge card-badge--static" title={task.notes}>
-            <IconNote size={15} />
-          </span>
-        )}
-        <span className="spacer" />
-        <DoneButton task={task} cardRef={drag.ref} />
+        <CardBadges task={task} />
       </div>
     </motion.article>
   );
 }
 
 export function ProjectCard({ task }: { task: Task }) {
-  const { drag, swimming, props } = useCardProps(task);
+  const { swimming, props } = useCardProps(task);
   const updateTask = useTasks((s) => s.updateTask);
   const total = task.subtasks.length;
   const done = task.subtasks.filter((s) => s.done).length;
@@ -136,14 +119,12 @@ export function ProjectCard({ task }: { task: Task }) {
     <motion.article
       {...cardMotion(swimming)}
       {...props}
-      className={`card card--project ${swimming ? 'is-swimming' : ''} ${task.runningSince ? 'is-running' : ''} ${allDone ? 'is-complete' : ''}`}
+      className={`card card--project ${swimming ? 'is-swimming' : ''} ${allDone ? 'is-complete' : ''}`}
       aria-label={`Proyecto: ${task.title}`}
     >
       <div className="card-head">
-        <span className="grip" title="Arrastralo al balde cuando lo termines">
-          <IconGrip size={16} />
-        </span>
         <h3 className="card-title">{task.title}</h3>
+        <CardBadges task={task} />
         <span className="progress-count">
           {done}/{total}
         </span>
@@ -166,20 +147,6 @@ export function ProjectCard({ task }: { task: Task }) {
       </div>
 
       {!task.collapsed && <SubtaskList task={task} />}
-
-      {allDone && <p className="complete-hint">¡Todo tildado! Ya podés tirarlo al balde 🪣</p>}
-
-      <div className="card-actions">
-        <TimerButton task={task} />
-        <MailBadge task={task} />
-        {task.notes && (
-          <span className="card-badge card-badge--static" title={task.notes}>
-            <IconNote size={15} />
-          </span>
-        )}
-        <span className="spacer" />
-        <DoneButton task={task} cardRef={drag.ref} />
-      </div>
     </motion.article>
   );
 }

@@ -25,10 +25,6 @@ export default function App() {
           <Pond kind="quick" />
           <Pond kind="project" />
         </main>
-        <p className="footer-tip">
-          Tip: agarrá una tarea y arrastrala al balde cuando la termines. Pegá (Ctrl+V) un link de Outlook para crear
-          una tarea con ese mail.
-        </p>
       </div>
       <Bucket />
       <CatchCard />

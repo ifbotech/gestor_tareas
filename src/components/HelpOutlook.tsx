@@ -44,7 +44,7 @@ export function HelpOutlook() {
                 <kbd>C</kbd>). Se ve algo así: <code>outlook.office.com/mail/inbox/id/AAQk…</code>
               </li>
               <li>
-                En Mojarrita pegalo con <kbd>Ctrl</kbd>+<kbd>V</kbd> en cualquier parte de la pantalla: te pregunta si
+                En Mis tareas pegalo con <kbd>Ctrl</kbd>+<kbd>V</kbd> en cualquier parte de la pantalla: te pregunta si
                 querés crear una tarea nueva o sumarlo a una que ya tenés. También podés pegarlo en el detalle de la
                 tarea, en “Mails vinculados”.
               </li>
@@ -56,9 +56,9 @@ export function HelpOutlook() {
               <span className="step-n">2</span> Botón de un clic para la barra de favoritos
             </h3>
             <p>
-              Arrastrá este botón a la barra de favoritos. Con un mail abierto en Outlook web, tocalo y se abre
-              Mojarrita con ese mail listo para vincular. Si antes seleccionás el asunto con el mouse, lo usa como
-              nombre de la tarea.
+              Arrastrá este botón a la barra de favoritos. Con un mail abierto en Outlook web, tocalo y se abre Mis
+              tareas con ese mail listo para vincular. Si antes seleccionás el asunto con el mouse, lo usa como nombre
+              de la tarea.
             </p>
             <div className="bookmarklet-row">
               <a
@@ -70,7 +70,7 @@ export function HelpOutlook() {
                 }}
                 draggable
               >
-                🐟 Mail → Mojarrita
+                🐟 Mail → Mis tareas
               </a>
               <button
                 type="button"
@@ -81,8 +81,8 @@ export function HelpOutlook() {
               </button>
             </div>
             <p className="muted small">
-              ¿No se deja arrastrar? Creá un favorito nuevo (<kbd>Ctrl</kbd>+<kbd>D</kbd>), ponele de nombre “Mail →
-              Mojarrita” y en la dirección pegá el código copiado. Si no ves la barra: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+
+              ¿No se deja arrastrar? Creá un favorito nuevo (<kbd>Ctrl</kbd>+<kbd>D</kbd>), ponele de nombre “Mail → Mis
+              tareas” y en la dirección pegá el código copiado. Si no ves la barra: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+
               <kbd>B</kbd>.
             </p>
           </li>

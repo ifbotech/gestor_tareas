@@ -1,23 +1,55 @@
-/* ---------- Base ---------- */
-
+/* ---------- Tokens ----------
+ * Agua calma: fondo celeste muy suave (Sky Blue), bloques translúcidos, tarjetas verde-azuladas apagadas
+ * y texto Deep Space Blue. Amber Flame y Tiger Orange solo como acento puntual (foco, cola del pez, hoy).
+ * Un único look claro y tranquilo, pensado para verlo todo el día.
+ */
 :root {
-  --sky-0: #ecf9ff;
-  --sky-1: #d6f1ff;
-  --sky-2: #b8e5fb;
-  --sky-3: #93d4f5;
-  --sky-4: #6cbfee;
-  --ink: #0c3557;
-  --ink-soft: #3f6787;
-  --ink-faint: #6f8ea8;
-  --white: #ffffff;
-  --accent: #1f6fc2;
-  --accent-strong: #15569e;
-  --warn: #b5541c;
-  --danger: #c2413a;
-  --card-shadow: 0 14px 28px -16px rgba(9, 46, 84, 0.65), 0 3px 8px -2px rgba(9, 46, 84, 0.18);
-  --panel-bg: linear-gradient(180deg, rgba(126, 196, 240, 0.42), rgba(84, 165, 228, 0.3));
-  --panel-border: rgba(255, 255, 255, 0.7);
-  --radius: 18px;
+  --sky: #8ecae6;
+  --teal: #219ebc;
+  --deep: #023047;
+  --amber: #ffb703;
+  --orange: #fb8500;
+
+  --bg-top: #eef8fb;
+  --bg-mid: #dcf0f6;
+  --bg-bottom: #c6e5ef;
+  --ink: #023047;
+  --ink-soft: #33586a;
+  --ink-faint: #557684;
+  --on-card: #ffffff;
+
+  --surface: #ffffff;
+  --surface-2: #f5fafc;
+  --surface-3: #e8f3f7;
+  --line: #d4e7ee;
+  --line-strong: #b4d3df;
+
+  --pond-bg: linear-gradient(180deg, rgba(142, 202, 230, 0.28), rgba(142, 202, 230, 0.16));
+  --pond-bg-alt: linear-gradient(180deg, rgba(120, 186, 196, 0.28), rgba(120, 186, 196, 0.16));
+  --pond-line: rgba(255, 255, 255, 0.75);
+  --glass: rgba(255, 255, 255, 0.62);
+  --glass-strong: rgba(255, 255, 255, 0.85);
+
+  --primary: #1b7790;
+  --primary-strong: #12596d;
+  --primary-soft: #e2f1f6;
+  --focus: #ffb703;
+  --accent-soft: #fff1cc;
+  --accent-line: #f3dc9c;
+  --accent-ink: #7a4a00;
+  --danger: #b0443a;
+  --warn: #9a5a0c;
+
+  --weed-back: #6f9b88;
+  --weed-mid: #5f8f7b;
+  --weed-front: #7aa891;
+  --pebble: #a9b8b4;
+  --pebble-dark: #8a9c98;
+  --metal-badge: #5b666e;
+
+  --shadow-rgb: 2, 48, 71;
+  --card-shadow: 0 10px 22px -16px rgba(var(--shadow-rgb), 0.6), 0 2px 6px -2px rgba(var(--shadow-rgb), 0.16);
+  --radius: 16px;
   --font: 'Nunito Variable', 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   color-scheme: light;
 }
@@ -35,7 +67,7 @@ body {
 body {
   font-family: var(--font);
   color: var(--ink);
-  background: linear-gradient(180deg, #dff5ff 0%, #bfe8fc 40%, #9bd7f6 100%);
+  background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 45%, var(--bg-bottom) 100%);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
@@ -57,7 +89,7 @@ button:disabled {
 }
 
 :focus-visible {
-  outline: 3px solid #ffd166;
+  outline: 3px solid var(--focus);
   outline-offset: 2px;
 }
 
@@ -78,8 +110,8 @@ kbd {
   font-family: inherit;
   font-size: 0.8em;
   font-weight: 700;
-  background: #fff;
-  border: 1px solid #c8dbe8;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
   border-bottom-width: 2px;
   border-radius: 6px;
   padding: 0 0.35em;
@@ -87,7 +119,7 @@ kbd {
 
 code {
   font-size: 0.85em;
-  background: #e8f4fb;
+  background: var(--surface-3);
   border-radius: 6px;
   padding: 0.05em 0.35em;
   word-break: break-all;
@@ -100,7 +132,7 @@ body.is-fishing * {
   -webkit-user-select: none !important;
 }
 
-/* ---------- Fondo marino ---------- */
+/* ---------- Fondo: luz, burbujas y algas ---------- */
 
 .ocean {
   position: fixed;
@@ -114,10 +146,10 @@ body.is-fishing * {
   position: absolute;
   inset: -20%;
   background:
-    radial-gradient(40% 30% at 20% 15%, rgba(255, 255, 255, 0.55), transparent 70%),
-    radial-gradient(30% 25% at 80% 10%, rgba(255, 255, 255, 0.4), transparent 70%),
-    radial-gradient(35% 30% at 60% 60%, rgba(255, 255, 255, 0.18), transparent 70%);
-  animation: light-drift 22s ease-in-out infinite alternate;
+    radial-gradient(40% 30% at 20% 12%, rgba(255, 255, 255, 0.55), transparent 70%),
+    radial-gradient(30% 25% at 80% 8%, rgba(255, 255, 255, 0.4), transparent 70%),
+    radial-gradient(35% 30% at 60% 60%, rgba(255, 255, 255, 0.14), transparent 70%);
+  animation: light-drift 26s ease-in-out infinite alternate;
 }
 
 @keyframes light-drift {
@@ -125,7 +157,7 @@ body.is-fishing * {
     transform: translate3d(-2%, -1%, 0) scale(1);
   }
   to {
-    transform: translate3d(3%, 2%, 0) scale(1.06);
+    transform: translate3d(3%, 2%, 0) scale(1.05);
   }
 }
 
@@ -139,11 +171,11 @@ body.is-fishing * {
     rgba(255, 255, 255, 0.25) 45%,
     rgba(255, 255, 255, 0.08) 70%
   );
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   animation-name: bubble-rise;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
-  opacity: 0.7;
+  opacity: 0.65;
 }
 
 @keyframes bubble-rise {
@@ -152,13 +184,13 @@ body.is-fishing * {
     opacity: 0;
   }
   10% {
-    opacity: 0.7;
+    opacity: 0.65;
   }
   50% {
     transform: translate3d(var(--drift), -55vh, 0);
   }
   90% {
-    opacity: 0.6;
+    opacity: 0.55;
   }
   100% {
     transform: translate3d(0, -110vh, 0);
@@ -166,33 +198,21 @@ body.is-fishing * {
   }
 }
 
-.ocean-waves {
+.seaweed {
   position: absolute;
-  left: -40px;
   bottom: 0;
-  width: calc(100% + 80px);
-  height: 120px;
+  height: min(46vh, 380px);
+  width: auto;
+  overflow: visible;
 }
 
-.wave {
-  animation: wave-sway 9s ease-in-out infinite alternate;
-}
-.wave-1 {
-  fill: rgba(80, 170, 230, 0.22);
-}
-.wave-2 {
-  fill: rgba(56, 145, 214, 0.2);
-  animation-duration: 12s;
-  animation-direction: alternate-reverse;
+.seaweed--left {
+  left: -10px;
 }
 
-@keyframes wave-sway {
-  from {
-    transform: translateX(-30px);
-  }
-  to {
-    transform: translateX(30px);
-  }
+.seaweed--right {
+  right: 150px;
+  height: min(38vh, 320px);
 }
 
 /* ---------- Layout ---------- */
@@ -202,7 +222,7 @@ body.is-fishing * {
   z-index: 1;
   max-width: 1240px;
   margin: 0 auto;
-  padding: 20px 24px 200px;
+  padding: 22px 24px 200px;
 }
 
 .topbar {
@@ -217,36 +237,36 @@ body.is-fishing * {
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 
 .brand h1 {
   margin: 0;
-  font-size: 1.9rem;
-  font-weight: 900;
+  font-size: 1.85rem;
+  font-weight: 850;
   letter-spacing: -0.02em;
   color: var(--ink);
   line-height: 1;
 }
 
 .brand-date {
-  margin: 4px 0 0;
+  margin: 5px 0 0;
   color: var(--ink-soft);
   font-weight: 600;
 }
 
 .brand-fish {
-  filter: drop-shadow(0 6px 8px rgba(12, 53, 87, 0.2));
-  animation: brand-bob 3.2s ease-in-out infinite;
+  filter: drop-shadow(0 5px 6px rgba(var(--shadow-rgb), 0.16));
+  animation: brand-bob 5s ease-in-out infinite;
 }
 
 @keyframes brand-bob {
   0%,
   100% {
-    transform: translateY(0) rotate(-3deg);
+    transform: translateY(0) rotate(-2deg);
   }
   50% {
-    transform: translateY(-4px) rotate(3deg);
+    transform: translateY(-3px) rotate(2deg);
   }
 }
 
@@ -264,12 +284,12 @@ body.is-fishing * {
   height: 42px;
   padding: 0 16px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.85);
-  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--pond-line);
+  background: var(--glass);
   backdrop-filter: blur(8px);
   color: var(--ink);
   font-weight: 700;
-  box-shadow: 0 6px 16px -10px rgba(12, 53, 87, 0.5);
+  box-shadow: 0 6px 16px -12px rgba(var(--shadow-rgb), 0.5);
   transition:
     background 0.15s,
     transform 0.15s;
@@ -277,19 +297,20 @@ body.is-fishing * {
 
 .today-pill:hover,
 .top-btn:hover {
-  background: rgba(255, 255, 255, 0.85);
+  background: var(--glass-strong);
   transform: translateY(-1px);
 }
 
 .today-pill strong {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
+  font-variant-numeric: tabular-nums;
 }
 
 .today-time {
   color: var(--ink-soft);
   font-weight: 700;
   padding-left: 8px;
-  border-left: 1px solid rgba(12, 53, 87, 0.15);
+  border-left: 1px solid rgba(var(--shadow-rgb), 0.15);
 }
 
 .top-btn--icon {
@@ -305,79 +326,66 @@ body.is-fishing * {
   align-items: start;
 }
 
-.footer-tip {
-  margin: 28px auto 0;
-  max-width: 640px;
-  text-align: center;
-  color: var(--ink-soft);
-  font-size: 0.9rem;
-  opacity: 0.85;
-}
-
-/* ---------- Estanques (bloques) ---------- */
+/* ---------- Bloques ---------- */
 
 .pond {
-  background: var(--panel-bg);
-  border: 1px solid var(--panel-border);
-  border-radius: 28px;
-  padding: 20px 18px 18px;
+  background: var(--pond-bg);
+  border: 1px solid var(--pond-line);
+  border-radius: 26px;
+  padding: 18px;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    0 20px 40px -30px rgba(12, 53, 87, 0.6);
+    0 18px 36px -30px rgba(var(--shadow-rgb), 0.55);
   backdrop-filter: blur(6px);
 }
 
 .pond--project {
-  background: linear-gradient(180deg, rgba(98, 172, 236, 0.45), rgba(60, 138, 214, 0.32));
+  background: var(--pond-bg-alt);
 }
 
 .pond-head {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-bottom: 14px;
 }
 
 .pond-head h2 {
   margin: 0;
-  font-size: 1.3rem;
-  font-weight: 900;
+  font-size: 1.2rem;
+  font-weight: 850;
   letter-spacing: -0.01em;
+  color: var(--ink);
 }
 
 .pond-count {
-  min-width: 28px;
-  height: 28px;
+  min-width: 26px;
+  height: 26px;
   padding: 0 8px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--glass-strong);
   display: inline-grid;
   place-items: center;
   font-weight: 800;
-  font-size: 0.9rem;
-  color: var(--accent-strong);
-}
-
-.pond-sub {
-  margin: 4px 0 14px;
-  color: var(--ink-soft);
-  font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
+  color: var(--primary-strong);
+  font-variant-numeric: tabular-nums;
 }
 
 .add-form {
   display: flex;
   gap: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .add-input {
   flex: 1;
   min-width: 0;
-  height: 48px;
-  padding: 0 18px;
-  border-radius: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.9);
-  background: rgba(255, 255, 255, 0.82);
+  height: 46px;
+  padding: 0 16px;
+  border-radius: 14px;
+  border: 1.5px solid var(--pond-line);
+  background: var(--glass-strong);
   font-weight: 650;
   font-size: 1rem;
   outline: none;
@@ -387,52 +395,52 @@ body.is-fishing * {
 }
 
 .add-input::placeholder {
-  color: #7b9bb5;
+  color: var(--ink-faint);
 }
 
 .add-input:focus {
-  border-color: #fff;
-  box-shadow: 0 0 0 4px rgba(31, 111, 194, 0.25);
-  background: #fff;
+  border-color: var(--surface);
+  box-shadow: 0 0 0 4px rgba(33, 158, 188, 0.2);
+  background: var(--surface);
 }
 
 .add-btn {
-  width: 48px;
-  height: 48px;
-  border-radius: 16px;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
   border: none;
-  background: linear-gradient(140deg, #3b9be3, #1d6fbd);
-  color: #fff;
+  background: var(--primary);
+  color: var(--on-card);
   display: grid;
   place-items: center;
   box-shadow: var(--card-shadow);
   transition:
-    transform 0.15s,
-    opacity 0.15s;
+    opacity 0.15s,
+    background 0.15s;
 }
 
 .add-btn:disabled {
-  opacity: 0.45;
+  opacity: 0.35;
 }
 
 .add-btn:not(:disabled):hover {
-  transform: translateY(-1px) scale(1.04);
+  background: var(--primary-strong);
 }
 
 .cards {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .empty {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 26px 10px;
+  gap: 10px;
+  padding: 22px 10px;
   text-align: center;
-  color: var(--ink-soft);
+  color: var(--ink-faint);
   font-weight: 650;
 }
 
@@ -441,8 +449,7 @@ body.is-fishing * {
 }
 
 .empty-fish {
-  opacity: 0.85;
-  animation: brand-bob 3s ease-in-out infinite;
+  opacity: 0.8;
 }
 
 /* ---------- Tarjetas ---------- */
@@ -450,9 +457,9 @@ body.is-fishing * {
 .card {
   position: relative;
   border-radius: var(--radius);
-  padding: 14px 14px 12px;
-  color: var(--white);
-  background: linear-gradient(140deg, var(--from), var(--to));
+  padding: 14px;
+  color: var(--on-card);
+  background: linear-gradient(150deg, var(--from), var(--to));
   box-shadow: var(--card-shadow);
   cursor: grab;
   user-select: none;
@@ -462,18 +469,15 @@ body.is-fishing * {
   overflow: hidden;
   transition:
     box-shadow 0.2s,
-    filter 0.2s,
-    opacity 0.2s;
+    filter 0.2s;
 }
 
-/* brillo de agua sobre la tarjeta */
+/* un reflejo de agua, muy suave */
 .card::before {
   content: '';
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(120% 70% at 10% -10%, rgba(255, 255, 255, 0.35), transparent 55%),
-    radial-gradient(60% 60% at 110% 120%, rgba(0, 20, 60, 0.18), transparent 60%);
+  background: radial-gradient(120% 70% at 8% -20%, rgba(255, 255, 255, 0.16), transparent 55%);
   pointer-events: none;
 }
 
@@ -483,190 +487,97 @@ body.is-fishing * {
 
 .card:hover {
   box-shadow:
-    0 20px 34px -18px rgba(9, 46, 84, 0.75),
-    0 4px 10px -2px rgba(9, 46, 84, 0.2);
-  filter: brightness(1.04);
+    0 16px 28px -18px rgba(var(--shadow-rgb), 0.7),
+    0 3px 8px -2px rgba(var(--shadow-rgb), 0.18);
+  filter: brightness(1.03);
 }
 
 .card:focus-visible {
-  outline: 3px solid #ffd166;
+  outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
 
 .card.is-pressing {
-  filter: brightness(1.1);
+  filter: brightness(1.08);
   transform: scale(0.98);
 }
 
 .card.is-swimming {
-  opacity: 0.28;
   filter: saturate(0.6);
   box-shadow: none;
-  outline: 2px dashed rgba(255, 255, 255, 0.9);
+  outline: 2px dashed rgba(255, 255, 255, 0.85);
   outline-offset: -6px;
-}
-
-.card.is-running {
-  box-shadow:
-    0 0 0 3px rgba(255, 209, 102, 0.85),
-    var(--card-shadow);
 }
 
 .card-head {
   display: flex;
   align-items: flex-start;
-  gap: 6px;
-}
-
-.grip {
-  flex: none;
-  opacity: 0.55;
-  margin-top: 3px;
-  margin-left: -4px;
-}
-
-.card:hover .grip {
-  opacity: 0.9;
+  gap: 8px;
 }
 
 .card-title {
   flex: 1;
+  min-width: 0;
   margin: 0;
-  font-size: 1.05rem;
-  font-weight: 800;
-  line-height: 1.3;
+  font-size: 1.02rem;
+  font-weight: 750;
+  line-height: 1.35;
   word-break: break-word;
-  text-shadow: 0 1px 2px rgba(0, 30, 70, 0.25);
 }
 
-.card-actions {
+.card-badges {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 12px;
-}
-
-.timer-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 32px;
-  padding: 0 12px 0 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  background: rgba(255, 255, 255, 0.16);
-  color: #fff;
-  font-weight: 800;
-  font-size: 0.85rem;
-  font-variant-numeric: tabular-nums;
-  transition: background 0.15s;
-}
-
-.timer-btn:hover {
-  background: rgba(255, 255, 255, 0.28);
-}
-
-.timer-btn.is-running {
-  background: #ffd166;
-  border-color: #ffd166;
-  color: #5a3b00;
-}
-
-.timer-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #c0392b;
-  animation: pulse 1.2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  50% {
-    transform: scale(1.5);
-    opacity: 0.4;
-  }
-}
-
-.timer-btn--large {
-  height: 40px;
-  padding: 0 16px 0 14px;
-  font-size: 0.95rem;
-  background: linear-gradient(140deg, #3b9be3, #1d6fbd);
-  border: none;
-}
-
-.timer-btn--large.is-running {
-  background: #ffd166;
+  gap: 4px;
+  flex: none;
 }
 
 .card-badge {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  height: 32px;
-  min-width: 32px;
-  padding: 0 8px;
+  height: 26px;
+  min-width: 26px;
+  padding: 0 6px;
   justify-content: center;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.14);
-  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--on-card);
   font-weight: 800;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   text-decoration: none;
   transition: background 0.15s;
 }
 
 a.card-badge:hover,
 button.card-badge:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.26);
 }
 
 .card-badge--static {
   cursor: grab;
 }
 
-.done-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: none;
-  background: #fff;
-  color: var(--to);
-  display: grid;
-  place-items: center;
-  box-shadow: 0 6px 14px -6px rgba(0, 30, 70, 0.6);
-  transition: transform 0.15s;
-}
-
-.done-btn:hover {
-  transform: scale(1.1) rotate(-6deg);
-}
-
 /* Proyectos */
-
-.card--project {
-  padding-bottom: 12px;
-}
 
 .progress-count {
   flex: none;
-  font-weight: 900;
-  font-size: 0.9rem;
-  background: rgba(255, 255, 255, 0.2);
+  font-weight: 800;
+  font-size: 0.82rem;
+  background: rgba(255, 255, 255, 0.16);
   border-radius: 999px;
-  padding: 2px 9px;
-  margin-top: 1px;
+  padding: 3px 9px;
+  font-variant-numeric: tabular-nums;
 }
 
 .collapse-btn {
   flex: none;
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   border: none;
   background: transparent;
-  color: #fff;
+  color: var(--on-card);
   display: grid;
   place-items: center;
   transition:
@@ -675,7 +586,7 @@ button.card-badge:hover {
 }
 
 .collapse-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .collapse-btn.is-collapsed {
@@ -683,28 +594,21 @@ button.card-badge:hover {
 }
 
 .progress {
-  height: 7px;
+  height: 5px;
   border-radius: 999px;
-  background: rgba(0, 25, 70, 0.28);
-  margin: 10px 0 8px;
+  background: rgba(2, 30, 45, 0.25);
+  margin: 10px 0 6px;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #bfeaff, #fff);
+  background: rgba(255, 255, 255, 0.85);
 }
 
 .card.is-complete .progress-fill {
-  background: linear-gradient(90deg, #ffe08a, #ffd166);
-}
-
-.complete-hint {
-  margin: 8px 0 0;
-  font-weight: 800;
-  font-size: 0.9rem;
-  color: #fff3c4;
+  background: var(--amber);
 }
 
 /* Subtareas */
@@ -723,18 +627,18 @@ button.card-badge:hover {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 3px 0;
+  padding: 2px 0;
   overflow: hidden;
 }
 
 .check {
   flex: none;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.85);
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--to, var(--accent));
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--to, var(--primary));
   display: grid;
   place-items: center;
   padding: 0;
@@ -742,7 +646,7 @@ button.card-badge:hover {
 }
 
 .check.is-on {
-  background: #fff;
+  background: var(--on-card);
 }
 
 .check span {
@@ -756,7 +660,7 @@ button.card-badge:hover {
 
 .subtask.is-done .subtask-title {
   text-decoration: line-through;
-  opacity: 0.65;
+  opacity: 0.6;
 }
 
 .subtask-x {
@@ -781,12 +685,12 @@ button.card-badge:hover {
 }
 
 .subtask-x:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.18);
 }
 
 @media (hover: none) {
   .subtask-x {
-    opacity: 0.6;
+    opacity: 0.55;
   }
 }
 
@@ -795,9 +699,9 @@ button.card-badge:hover {
   align-items: center;
   gap: 8px;
   margin-top: 4px;
-  padding: 2px 2px 2px 4px;
+  padding: 2px 2px 2px 3px;
   border-radius: 10px;
-  opacity: 0.85;
+  opacity: 0.8;
 }
 
 .subtask-add input {
@@ -808,16 +712,16 @@ button.card-badge:hover {
   outline: none;
   color: inherit;
   font-weight: 650;
-  padding: 6px 4px;
+  padding: 5px 4px;
   border-radius: 8px;
 }
 
 .subtask-add input::placeholder {
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.72);
 }
 
 .subtask-add:focus-within {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.14);
   opacity: 1;
 }
 
@@ -827,22 +731,22 @@ button.card-badge:hover {
 }
 
 .subtasks--detail .check {
-  border-color: #8fb7d6;
-  background: #fff;
-  color: #fff;
+  border-color: var(--line-strong);
+  background: var(--surface);
+  color: var(--on-card);
 }
 
 .subtasks--detail .check.is-on {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--primary);
+  border-color: var(--primary);
 }
 
 .subtasks--detail .subtask-x:hover {
-  background: #e7f2fa;
+  background: var(--surface-3);
 }
 
 .subtasks--detail .subtask-add {
-  border: 2px dashed #c4ddef;
+  border: 1.5px dashed var(--line-strong);
 }
 
 .subtasks--detail .subtask-add input::placeholder {
@@ -850,7 +754,7 @@ button.card-badge:hover {
 }
 
 .subtasks--detail .subtask-add:focus-within {
-  background: #f2f9fe;
+  background: var(--surface-2);
 }
 
 /* Texto editable */
@@ -868,11 +772,11 @@ button.card-badge:hover {
 }
 
 .editable:hover {
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .editable.is-empty {
-  opacity: 0.6;
+  opacity: 0.65;
   font-style: italic;
 }
 
@@ -880,8 +784,8 @@ button.card-badge:hover {
   flex: 1;
   min-width: 0;
   width: 100%;
-  border: 2px solid #9ccbec;
-  background: #fff;
+  border: 1.5px solid var(--line-strong);
+  background: var(--surface);
   color: var(--ink);
   border-radius: 8px;
   padding: 3px 6px;
@@ -890,7 +794,7 @@ button.card-badge:hover {
   resize: vertical;
 }
 
-/* Tarjeta fantasma que se encoge hasta ser pez */
+/* ---------- Tarjeta → mojarrita ---------- */
 
 .pond-overlay {
   position: fixed;
@@ -902,10 +806,10 @@ button.card-badge:hover {
 .ghost-card {
   position: fixed;
   overflow: hidden;
-  background: linear-gradient(140deg, var(--from), var(--to));
+  background: linear-gradient(150deg, var(--from), var(--to));
   box-shadow: var(--card-shadow);
-  color: #fff;
-  font-weight: 800;
+  color: var(--on-card);
+  font-weight: 750;
   padding: 14px 16px;
   white-space: nowrap;
 }
@@ -919,9 +823,9 @@ button.card-badge:hover {
   position: absolute;
   left: 0;
   top: 0;
-  width: 104px;
-  height: 52px;
-  filter: drop-shadow(0 10px 10px rgba(9, 46, 84, 0.3));
+  width: 124px;
+  height: 41px;
+  filter: drop-shadow(0 8px 8px rgba(var(--shadow-rgb), 0.25));
   will-change: transform;
 }
 
@@ -944,10 +848,10 @@ button.card-badge:hover {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  background: rgba(12, 53, 87, 0.82);
-  color: #fff;
-  font-weight: 800;
-  font-size: 0.75rem;
+  background: rgba(2, 48, 71, 0.78);
+  color: var(--on-card);
+  font-weight: 750;
+  font-size: 0.74rem;
   padding: 3px 10px;
   border-radius: 999px;
 }
@@ -956,7 +860,7 @@ button.card-badge:hover {
   position: fixed;
   border-radius: 50%;
   margin: -6px 0 0 -6px;
-  background: radial-gradient(circle at 32% 30%, #fff, rgba(255, 255, 255, 0.35) 50%, rgba(255, 255, 255, 0.1) 75%);
+  background: radial-gradient(circle at 32% 30%, #ffffff, rgba(255, 255, 255, 0.35) 50%, rgba(255, 255, 255, 0.1) 75%);
   border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
@@ -969,55 +873,60 @@ button.card-badge:hover {
 
 .fish-tail {
   transform-box: view-box;
-  transform-origin: 38px 30px;
+  transform-origin: 31px 22px;
 }
 
 .fish-pec {
   transform-box: view-box;
-  transform-origin: 90px 34px;
+  transform-origin: 106px 28.5px;
 }
 
 .fish-dorsal {
   transform-box: view-box;
-  transform-origin: 68px 13px;
+  transform-origin: 77px 10px;
 }
 
 .fish--swim .fish-tail {
-  animation: tail-wag 0.32s ease-in-out infinite alternate;
+  animation: tail-wag 0.34s ease-in-out infinite alternate;
 }
 
 .fish--swim .fish-pec {
-  animation: pec-flap 0.45s ease-in-out infinite alternate;
+  animation: pec-flap 0.5s ease-in-out infinite alternate;
 }
 
 .fish--swim .fish-dorsal {
-  animation: dorsal 0.64s ease-in-out infinite alternate;
+  animation: dorsal 0.68s ease-in-out infinite alternate;
+}
+
+/* El del encabezado nada tranquilo. */
+.brand-fish.fish--swim .fish-tail {
+  animation-duration: 0.9s;
 }
 
 @keyframes tail-wag {
   from {
-    transform: rotate(-17deg) scaleX(0.92);
+    transform: rotate(-14deg) scaleX(0.94);
   }
   to {
-    transform: rotate(17deg) scaleX(1.04);
+    transform: rotate(14deg) scaleX(1.03);
   }
 }
 
 @keyframes pec-flap {
   from {
-    transform: rotate(-14deg);
+    transform: rotate(-12deg);
   }
   to {
-    transform: rotate(12deg);
+    transform: rotate(10deg);
   }
 }
 
 @keyframes dorsal {
   from {
-    transform: skewX(-6deg);
+    transform: skewX(-5deg);
   }
   to {
-    transform: skewX(6deg);
+    transform: skewX(5deg);
   }
 }
 
@@ -1026,7 +935,7 @@ button.card-badge:hover {
 .bucket-dock {
   position: fixed;
   right: max(18px, env(safe-area-inset-right));
-  bottom: max(14px, env(safe-area-inset-bottom));
+  bottom: max(12px, env(safe-area-inset-bottom));
   z-index: 40;
   display: flex;
   flex-direction: column;
@@ -1039,8 +948,8 @@ button.card-badge:hover {
 }
 
 .bucket {
-  width: 156px;
-  height: 168px;
+  width: 150px;
+  height: 161px;
   padding: 0;
   border: none;
   background: transparent;
@@ -1059,40 +968,25 @@ button.card-badge:hover {
   width: 100%;
   height: 100%;
   overflow: visible;
-  filter: drop-shadow(0 10px 14px rgba(12, 53, 87, 0.25));
   transition: filter 0.2s;
 }
 
-.bucket-dock.is-fishing .bucket-art {
-  animation: bucket-call 1.1s ease-in-out infinite;
-}
-
-.bucket-dock.is-hot .bucket-art {
-  animation: none;
-}
-
 .bucket-dock.is-hot .bucket-svg {
-  filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.95)) drop-shadow(0 10px 14px rgba(12, 53, 87, 0.25));
-}
-
-@keyframes bucket-call {
-  50% {
-    transform: translateY(-5px);
-  }
+  filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.95));
 }
 
 .bucket-handle {
   transform-box: view-box;
-  transform-origin: 80px 62px;
-  transition: transform 0.35s cubic-bezier(0.3, 1.6, 0.5, 1);
+  transform-origin: 80px 63px;
+  transition: transform 0.4s cubic-bezier(0.3, 1.5, 0.5, 1);
 }
 
 .bucket:hover .bucket-handle {
-  transform: rotate(-6deg);
+  transform: rotate(-5deg);
 }
 
 .bucket-dock.is-hot .bucket-handle {
-  transform: rotate(-24deg);
+  transform: rotate(-22deg);
 }
 
 .bucket-fish {
@@ -1124,14 +1018,14 @@ button.card-badge:hover {
 .bucket-ripples ellipse {
   fill: none;
   stroke: rgba(255, 255, 255, 0.85);
-  stroke-width: 1.4;
+  stroke-width: 1.3;
   transform-box: fill-box;
   transform-origin: center;
-  animation: ripple 1.2s ease-out infinite;
+  animation: ripple 1.3s ease-out infinite;
 }
 
 .bucket-ripples ellipse:nth-child(2) {
-  animation-delay: 0.6s;
+  animation-delay: 0.65s;
 }
 
 @keyframes ripple {
@@ -1146,55 +1040,33 @@ button.card-badge:hover {
 }
 
 .bucket-label {
-  margin-top: -6px;
+  margin-top: -2px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 5px 6px 5px 12px;
+  padding: 4px 5px 4px 12px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--pond-line);
+  background: var(--glass-strong);
   backdrop-filter: blur(6px);
-  font-weight: 800;
-  font-size: 0.85rem;
+  font-weight: 750;
+  font-size: 0.82rem;
   color: var(--ink);
-  box-shadow: 0 6px 14px -8px rgba(12, 53, 87, 0.5);
+  box-shadow: 0 6px 14px -10px rgba(var(--shadow-rgb), 0.5);
 }
 
 .bucket-count {
-  background: #6d7782;
-  color: #fff;
+  background: var(--metal-badge);
+  color: var(--on-card);
   border-radius: 999px;
   padding: 1px 9px;
-}
-
-.bucket-hint {
-  position: absolute;
-  bottom: calc(100% - 4px);
-  white-space: nowrap;
-  background: var(--ink);
-  color: #fff;
-  font-weight: 800;
-  padding: 7px 14px;
-  border-radius: 999px;
-  box-shadow: 0 8px 18px -8px rgba(12, 53, 87, 0.6);
-}
-
-.bucket-hint::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: -6px;
-  margin-left: -6px;
-  border: 6px solid transparent;
-  border-bottom: none;
-  border-top-color: var(--ink);
+  font-variant-numeric: tabular-nums;
 }
 
 .splash {
   position: absolute;
   left: 50%;
-  top: 34%;
+  top: 35%;
   width: 0;
   height: 0;
   pointer-events: none;
@@ -1205,17 +1077,17 @@ button.card-badge:hover {
   left: -4px;
   top: -4px;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  background: radial-gradient(circle at 35% 30%, #e8f8ff, #59b4ee 60%, #2a83cc);
+  background: radial-gradient(circle at 35% 30%, #effaff, #7cc3dc 60%, #3c8fac);
 }
 
 .splash-ring {
   position: absolute;
-  left: -60px;
-  top: -14px;
-  width: 120px;
-  height: 28px;
+  left: -56px;
+  top: -12px;
+  width: 112px;
+  height: 24px;
   border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.9);
+  border: 2.5px solid rgba(255, 255, 255, 0.9);
 }
 
 .splash-plus {
@@ -1224,36 +1096,36 @@ button.card-badge:hover {
   top: -30px;
   width: 60px;
   text-align: center;
-  font-weight: 900;
+  font-weight: 850;
   color: var(--ink);
-  text-shadow: 0 1px 0 #fff;
+  text-shadow: 0 1px 0 var(--surface);
 }
 
-/* ---------- Tarjeta "¡Al balde!" ---------- */
+/* ---------- "¡Al balde!" ---------- */
 
 .catch-card {
   position: fixed;
   right: max(18px, env(safe-area-inset-right));
-  bottom: 214px;
+  bottom: 206px;
   z-index: 45;
   width: min(340px, calc(100vw - 32px));
-  background: #fff;
-  border-radius: 22px;
+  background: var(--surface);
+  border-radius: 20px;
   padding: 16px 16px 14px;
-  box-shadow: 0 24px 50px -20px rgba(12, 53, 87, 0.6);
-  border: 1px solid #d5ebf8;
+  box-shadow: 0 24px 50px -22px rgba(var(--shadow-rgb), 0.55);
+  border: 1px solid var(--line);
 }
 
 .catch-card::after {
   content: '';
   position: absolute;
-  right: 66px;
+  right: 64px;
   bottom: -9px;
   width: 18px;
   height: 18px;
-  background: #fff;
-  border-right: 1px solid #d5ebf8;
-  border-bottom: 1px solid #d5ebf8;
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
   transform: rotate(45deg);
 }
 
@@ -1277,9 +1149,9 @@ button.card-badge:hover {
 
 .catch-kicker {
   margin: 0;
-  font-weight: 900;
-  color: var(--accent);
-  font-size: 1.05rem;
+  font-weight: 850;
+  color: var(--primary-strong);
+  font-size: 1.02rem;
 }
 
 .catch-title {
@@ -1297,7 +1169,7 @@ button.card-badge:hover {
 .catch-label {
   display: block;
   font-weight: 800;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   margin: 8px 0 6px;
 }
 
@@ -1309,23 +1181,23 @@ button.card-badge:hover {
 }
 
 .chip {
-  border: 1px solid #cde4f3;
-  background: #f1f8fd;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
   border-radius: 999px;
   padding: 4px 10px;
   font-weight: 700;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: var(--ink-soft);
 }
 
 .chip:hover {
-  background: #e2f1fb;
+  background: var(--surface-3);
 }
 
 .chip.is-on {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--on-card);
 }
 
 .catch-actions {
@@ -1342,8 +1214,8 @@ button.card-badge:hover {
   height: 44px;
   padding: 0 14px;
   border-radius: 12px;
-  border: 2px solid #d3e7f4;
-  background: #f8fcff;
+  border: 1.5px solid var(--line);
+  background: var(--surface-2);
   font-weight: 600;
   outline: none;
   transition:
@@ -1351,14 +1223,18 @@ button.card-badge:hover {
     box-shadow 0.15s;
 }
 
+.input::placeholder {
+  color: var(--ink-faint);
+}
+
 .input:focus {
-  border-color: #7bbbe8;
-  box-shadow: 0 0 0 4px rgba(31, 111, 194, 0.15);
-  background: #fff;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 4px rgba(33, 158, 188, 0.14);
+  background: var(--surface);
 }
 
 .input.is-invalid {
-  border-color: #f0a37b;
+  border-color: var(--orange);
 }
 
 .textarea {
@@ -1390,7 +1266,7 @@ button.card-badge:hover {
 }
 
 .btn:disabled {
-  opacity: 0.45;
+  opacity: 0.4;
 }
 
 .btn:not(:disabled):active {
@@ -1398,22 +1274,21 @@ button.card-badge:hover {
 }
 
 .btn-primary {
-  background: linear-gradient(140deg, #3b9be3, #1d6fbd);
-  color: #fff;
-  box-shadow: 0 8px 16px -10px rgba(29, 111, 189, 0.9);
+  background: var(--primary);
+  color: var(--on-card);
 }
 
 .btn-primary:not(:disabled):hover {
-  filter: brightness(1.06);
+  background: var(--primary-strong);
 }
 
 .btn-secondary {
-  background: #e3f1fb;
-  color: var(--accent-strong);
+  background: var(--primary-soft);
+  color: var(--primary-strong);
 }
 
 .btn-secondary:hover {
-  background: #d3e9f8;
+  background: var(--surface-3);
 }
 
 .btn-ghost {
@@ -1422,12 +1297,12 @@ button.card-badge:hover {
 }
 
 .btn-ghost:not(:disabled):hover {
-  background: #eef6fc;
+  background: var(--surface-3);
 }
 
 .btn-danger {
   background: var(--danger);
-  color: #fff;
+  color: var(--on-card);
 }
 
 .btn-danger-text {
@@ -1454,14 +1329,14 @@ button.card-badge:hover {
 }
 
 .icon-btn:hover {
-  background: #eaf4fb;
+  background: var(--surface-3);
 }
 
 .link-btn {
   border: none;
   background: none;
   padding: 0;
-  color: var(--accent);
+  color: var(--primary);
   font-weight: 700;
   font-size: 0.88rem;
   text-decoration: underline;
@@ -1486,14 +1361,14 @@ button.card-badge:hover {
   height: 42px;
   padding: 0 14px;
   border-radius: 12px;
-  border: 2px solid #d3e7f4;
-  background: #f8fcff;
+  border: 1.5px solid var(--line);
+  background: var(--surface-2);
   color: var(--ink-faint);
   margin: 4px 0 14px;
 }
 
 .search:focus-within {
-  border-color: #7bbbe8;
+  border-color: var(--teal);
 }
 
 .search input {
@@ -1540,7 +1415,7 @@ button.card-badge:hover {
 .modal-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(10, 45, 78, 0.35);
+  background: rgba(2, 48, 71, 0.3);
   backdrop-filter: blur(3px);
 }
 
@@ -1550,9 +1425,9 @@ button.card-badge:hover {
   flex-direction: column;
   width: min(520px, 100%);
   max-height: calc(100dvh - 32px);
-  background: #fff;
-  border-radius: 24px;
-  box-shadow: 0 30px 60px -20px rgba(10, 45, 78, 0.55);
+  background: var(--surface);
+  border-radius: 22px;
+  box-shadow: 0 30px 60px -24px rgba(var(--shadow-rgb), 0.5);
   outline: none;
   overflow: hidden;
 }
@@ -1565,7 +1440,7 @@ button.card-badge:hover {
   width: min(480px, 100%);
   max-height: none;
   height: 100dvh;
-  border-radius: 24px 0 0 24px;
+  border-radius: 22px 0 0 22px;
 }
 
 .modal-head {
@@ -1573,14 +1448,14 @@ button.card-badge:hover {
   align-items: center;
   gap: 10px;
   padding: 16px 16px 12px 22px;
-  border-bottom: 1px solid #e6f1f8;
-  background: linear-gradient(180deg, #f1faff, #fff);
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
 }
 
 .modal-title {
   flex: 1;
-  font-weight: 900;
-  font-size: 1.15rem;
+  font-weight: 850;
+  font-size: 1.1rem;
   display: flex;
   align-items: baseline;
   gap: 10px;
@@ -1598,7 +1473,7 @@ button.card-badge:hover {
   align-items: center;
   gap: 8px;
   padding: 12px 16px;
-  border-top: 1px solid #e6f1f8;
+  border-top: 1px solid var(--line);
   flex-wrap: wrap;
 }
 
@@ -1608,8 +1483,8 @@ button.card-badge:hover {
   width: 100%;
   border: none;
   outline: none;
-  font-size: 1.5rem;
-  font-weight: 900;
+  font-size: 1.45rem;
+  font-weight: 850;
   color: var(--ink);
   padding: 4px 8px;
   margin: -4px -8px 0;
@@ -1618,7 +1493,7 @@ button.card-badge:hover {
 }
 
 .detail-title:focus {
-  background: #f1f8fd;
+  background: var(--surface-2);
 }
 
 .detail-meta {
@@ -1637,7 +1512,7 @@ button.card-badge:hover {
 
 .segmented {
   display: inline-flex;
-  background: #eaf4fb;
+  background: var(--surface-3);
   border-radius: 12px;
   padding: 3px;
 }
@@ -1652,9 +1527,9 @@ button.card-badge:hover {
 }
 
 .segmented button.is-on {
-  background: #fff;
-  color: var(--accent-strong);
-  box-shadow: 0 2px 6px -2px rgba(12, 53, 87, 0.3);
+  background: var(--surface);
+  color: var(--primary-strong);
+  box-shadow: 0 2px 6px -2px rgba(var(--shadow-rgb), 0.3);
 }
 
 .swatches {
@@ -1666,8 +1541,8 @@ button.card-badge:hover {
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  border: 3px solid #fff;
-  box-shadow: 0 0 0 1px #cfe2ef;
+  border: 3px solid var(--surface);
+  box-shadow: 0 0 0 1px var(--line-strong);
   padding: 0;
 }
 
@@ -1681,10 +1556,10 @@ button.card-badge:hover {
 
 .detail-section h3 {
   margin: 0 0 10px;
-  font-size: 0.82rem;
-  font-weight: 900;
+  font-size: 0.78rem;
+  font-weight: 850;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.07em;
   color: var(--ink-faint);
 }
 
@@ -1713,8 +1588,8 @@ button.card-badge:hover {
   gap: 10px;
   padding: 8px 8px 8px 10px;
   border-radius: 14px;
-  background: #f1f8fd;
-  border: 1px solid #d7eaf6;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
 }
 
 .mail-ico {
@@ -1724,14 +1599,14 @@ button.card-badge:hover {
   border-radius: 10px;
   display: grid;
   place-items: center;
-  background: #fff;
-  color: var(--accent);
-  border: 1px solid #d7eaf6;
+  background: var(--surface);
+  color: var(--primary);
+  border: 1px solid var(--line);
 }
 
 .mail-chip--outlook .mail-ico {
-  background: linear-gradient(140deg, #2f86d6, #1659a6);
-  color: #fff;
+  background: var(--primary);
+  color: var(--on-card);
   border: none;
 }
 
@@ -1769,15 +1644,15 @@ button.card-badge:hover {
   height: 32px;
   padding: 0 12px;
   border-radius: 10px;
-  background: var(--accent);
-  color: #fff;
+  background: var(--primary);
+  color: var(--on-card);
   font-weight: 800;
   font-size: 0.85rem;
   text-decoration: none;
 }
 
 .mail-open:hover {
-  background: var(--accent-strong);
+  background: var(--primary-strong);
 }
 
 .mail-icon-btn {
@@ -1793,7 +1668,7 @@ button.card-badge:hover {
 }
 
 .mail-icon-btn:hover {
-  background: #e2f0fa;
+  background: var(--surface-3);
 }
 
 .mail-add-row {
@@ -1827,8 +1702,8 @@ button.card-badge:hover {
 }
 
 .help-steps > li {
-  background: #f4faff;
-  border: 1px solid #ddeef9;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
   border-radius: 16px;
   padding: 14px 16px;
 }
@@ -1860,21 +1735,21 @@ button.card-badge:hover {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: var(--accent);
-  color: #fff;
+  background: var(--primary);
+  color: var(--on-card);
   display: inline-grid;
   place-items: center;
   font-size: 0.8rem;
-  font-weight: 900;
+  font-weight: 850;
 }
 
 .tag {
-  font-size: 0.7rem;
-  font-weight: 900;
+  font-size: 0.68rem;
+  font-weight: 850;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  background: #ffd166;
-  color: #5a3b00;
+  letter-spacing: 0.06em;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
   border-radius: 999px;
   padding: 2px 8px;
 }
@@ -1893,21 +1768,20 @@ button.card-badge:hover {
   height: 40px;
   padding: 0 16px;
   border-radius: 12px;
-  background: linear-gradient(140deg, #3b9be3, #1d6fbd);
-  color: #fff;
-  font-weight: 900;
+  background: var(--primary);
+  color: var(--on-card);
+  font-weight: 850;
   text-decoration: none;
   cursor: grab;
-  box-shadow: 0 8px 16px -10px rgba(29, 111, 189, 0.9);
-  border: 2px dashed rgba(255, 255, 255, 0.6);
+  border: 2px dashed rgba(255, 255, 255, 0.55);
 }
 
 .help-note {
   margin-top: 16px;
   padding: 12px 16px;
   border-radius: 16px;
-  background: #fff8e6;
-  border: 1px solid #f6e3b0;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-line);
 }
 
 .help-note h3 {
@@ -1928,10 +1802,10 @@ button.card-badge:hover {
 
 .incoming-section h3 {
   margin: 0 0 8px;
-  font-size: 0.82rem;
-  font-weight: 900;
+  font-size: 0.78rem;
+  font-weight: 850;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.07em;
   color: var(--ink-faint);
 }
 
@@ -1958,16 +1832,16 @@ button.card-badge:hover {
   align-items: center;
   gap: 10px;
   text-align: left;
-  border: 1px solid #d7eaf6;
-  background: #f8fcff;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
   border-radius: 12px;
   padding: 10px 12px;
   font-weight: 700;
 }
 
 .task-pick button:hover {
-  background: #eaf5fc;
-  border-color: #b9dbf1;
+  background: var(--surface-3);
+  border-color: var(--line-strong);
 }
 
 .task-pick-dot {
@@ -1988,11 +1862,11 @@ button.card-badge:hover {
 /* ---------- Bitácora ---------- */
 
 .log-title {
-  font-size: 1.3rem;
+  font-size: 1.25rem;
 }
 
 .log-subtitle {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 700;
   color: var(--ink-faint);
 }
@@ -2009,24 +1883,25 @@ button.card-badge:hover {
   flex-direction: column;
   gap: 2px;
   padding: 10px 12px;
-  border-radius: 16px;
-  background: linear-gradient(160deg, #eaf6fe, #d9eefb);
+  border-radius: 14px;
+  background: var(--surface-3);
 }
 
 .stat-label {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 800;
   color: var(--ink-faint);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
 }
 
 .stat-value {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 1.4rem;
-  font-weight: 900;
+  font-size: 1.35rem;
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
 }
 
 .stat-time {
@@ -2046,16 +1921,15 @@ button.card-badge:hover {
   gap: 8px;
   margin: 0 0 8px;
   font-size: 0.95rem;
-  font-weight: 900;
+  font-weight: 850;
   position: sticky;
   top: -18px;
-  background: #fff;
+  background: var(--surface);
   padding: 6px 0;
   z-index: 1;
 }
 
 .log-day-head .muted {
-  text-transform: none;
   font-size: 0.82rem;
   font-weight: 700;
 }
@@ -2073,9 +1947,9 @@ button.card-badge:hover {
   display: flex;
   gap: 12px;
   padding: 12px;
-  border-radius: 16px;
-  border: 1px solid #e1eff8;
-  background: #fbfdff;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
   overflow: hidden;
 }
 
@@ -2083,7 +1957,7 @@ button.card-badge:hover {
   flex: none;
   width: 44px;
   height: 44px;
-  border-radius: 14px;
+  border-radius: 12px;
   display: grid;
   place-items: center;
 }
@@ -2118,8 +1992,8 @@ button.card-badge:hover {
   gap: 4px;
   padding: 0 4px 0 8px;
   border-radius: 999px;
-  background: #e3f1fb;
-  color: var(--accent-strong);
+  background: var(--primary-soft);
+  color: var(--primary-strong);
   font-weight: 800;
   font-size: 0.85rem;
 }
@@ -2129,16 +2003,16 @@ button.card-badge:hover {
 }
 
 .log-duration.is-empty {
-  background: #fff4dc;
-  color: #8a5a00;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
 }
 
 .log-duration.is-invalid {
-  box-shadow: 0 0 0 2px #f0a37b;
+  box-shadow: 0 0 0 2px var(--orange);
 }
 
 .log-duration .editable-input {
-  width: 120px;
+  width: 140px;
   padding: 1px 6px;
 }
 
@@ -2150,7 +2024,7 @@ button.card-badge:hover {
 }
 
 .log-comment.editable:hover {
-  background: #f0f7fc;
+  background: var(--surface-3);
 }
 
 textarea.log-comment {
@@ -2172,6 +2046,7 @@ textarea.log-comment {
 
 .log-entry .mail-chip {
   padding: 4px 4px 4px 6px;
+  background: var(--surface);
 }
 
 .log-entry .mail-ico {
@@ -2203,11 +2078,11 @@ textarea.log-comment {
   top: calc(100% + 8px);
   z-index: 50;
   width: 270px;
-  background: #fff;
+  background: var(--surface);
   border-radius: 16px;
   padding: 8px;
-  box-shadow: 0 20px 40px -16px rgba(12, 53, 87, 0.5);
-  border: 1px solid #e0eef8;
+  box-shadow: 0 20px 40px -18px rgba(var(--shadow-rgb), 0.5);
+  border: 1px solid var(--line);
   transform-origin: top right;
 }
 
@@ -2225,7 +2100,7 @@ textarea.log-comment {
 }
 
 .menu-pop button:hover {
-  background: #eef6fc;
+  background: var(--surface-3);
 }
 
 .menu-note {
@@ -2235,7 +2110,16 @@ textarea.log-comment {
   font-weight: 600;
 }
 
-/* ---------- Toasts ---------- */
+.menu-version {
+  margin: 8px 10px 2px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+  font-weight: 700;
+}
+
+/* ---------- Avisos ---------- */
 
 .toasts {
   position: fixed;
@@ -2257,18 +2141,18 @@ textarea.log-comment {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: var(--ink);
-  color: #fff;
+  background: var(--deep);
+  color: var(--on-card);
   font-weight: 700;
   padding: 10px 16px;
   border-radius: 14px;
-  box-shadow: 0 14px 30px -14px rgba(12, 53, 87, 0.8);
+  box-shadow: 0 14px 30px -16px rgba(var(--shadow-rgb), 0.8);
 }
 
 .toast button {
   border: none;
-  background: rgba(255, 255, 255, 0.15);
-  color: #ffd166;
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--amber);
   font-weight: 800;
   border-radius: 8px;
   padding: 4px 10px;
@@ -2289,6 +2173,10 @@ textarea.log-comment {
   .ponds {
     grid-template-columns: 1fr;
   }
+
+  .seaweed--right {
+    right: 110px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -2301,8 +2189,8 @@ textarea.log-comment {
   }
 
   .brand-fish {
-    width: 48px;
-    height: 24px;
+    width: 60px;
+    height: 20px;
   }
 
   .topbar {
@@ -2328,22 +2216,31 @@ textarea.log-comment {
   }
 
   .pond {
-    padding: 16px 12px 14px;
+    padding: 14px 12px;
     border-radius: 22px;
   }
 
   .bucket {
-    width: 112px;
-    height: 121px;
+    width: 108px;
+    height: 116px;
+  }
+
+  .seaweed {
+    height: 30vh;
+  }
+
+  .seaweed--right {
+    right: 70px;
+    height: 24vh;
   }
 
   .catch-card {
-    bottom: 160px;
+    bottom: 154px;
     right: 16px;
   }
 
   .catch-card::after {
-    right: 46px;
+    right: 44px;
   }
 
   .modal-root {
@@ -2353,7 +2250,7 @@ textarea.log-comment {
 
   .modal {
     max-height: 92dvh;
-    border-radius: 24px 24px 0 0;
+    border-radius: 22px 22px 0 0;
   }
 
   .modal--side {
@@ -2382,9 +2279,7 @@ textarea.log-comment {
 @media (prefers-reduced-motion: reduce) {
   .ocean-bubble,
   .ocean-light,
-  .wave,
   .brand-fish,
-  .empty-fish,
   .bucket-fish,
   .fish--swim .fish-tail,
   .fish--swim .fish-pec,

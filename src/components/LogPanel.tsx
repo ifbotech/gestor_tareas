@@ -71,7 +71,7 @@ export function LogPanel() {
           className="btn btn-ghost"
           disabled={!log.length}
           onClick={() =>
-            downloadFile(`bitacora-mojarrita-${dayKey(Date.now())}.csv`, logToCsv(sorted), 'text/csv;charset=utf-8')
+            downloadFile(`bitacora-mis-tareas-${dayKey(Date.now())}.csv`, logToCsv(sorted), 'text/csv;charset=utf-8')
           }
         >
           <IconDownload size={16} /> Exportar a Excel (CSV)
@@ -99,11 +99,7 @@ export function LogPanel() {
       {log.length === 0 && (
         <div className="empty empty--log">
           <MiniFish size={56} className="empty-fish" />
-          <p>
-            Todavía no pescaste nada.
-            <br />
-            Arrastrá una tarea terminada al balde y aparece acá.
-          </p>
+          <p>Todavía no hay tareas terminadas.</p>
         </div>
       )}
       {log.length > 0 && filtered.length === 0 && <p className="muted center">No hay nada con “{query}”.</p>}
@@ -181,7 +177,7 @@ function LogRow({ entry }: { entry: LogEntry }) {
             <EditableText
               value={entry.minutes != null ? formatMinutes(entry.minutes) : ''}
               emptyLabel="¿Cuánto tardaste?"
-              placeholder="ej: 1h 30"
+              placeholder="ej: 1h 30 o de 9 a 10:30"
               ariaLabel="Tiempo que llevó"
               onSave={(v) => {
                 if (!v) {

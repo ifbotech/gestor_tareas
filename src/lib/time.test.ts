@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatClock, formatMinutes, parseDuration, startOfWeek, trackedMs } from './time';
+import { formatMinutes, parseDuration, startOfWeek } from './time';
 
 describe('parseDuration', () => {
   it.each([
@@ -17,13 +17,23 @@ describe('parseDuration', () => {
     ['2 horas 10 minutos', 130],
     ['2 horas y 10 minutos', 130],
     ['  20  ', 20],
+    // horarios
+    ['de 9 a 10:30', 90],
+    ['9:15-11', 105],
+    ['9:15 - 11:00', 105],
+    ['14 a 15.30', 90],
+    ['de 9hs a 10hs', 60],
+    ['10 hasta 12', 120],
   ])('"%s" → %i minutos', (input, expected) => {
     expect(parseDuration(input)).toBe(expected);
   });
 
-  it.each(['', 'un rato', 'media hora', '1 hora y media', 'abc 10'])('"%s" no se entiende', (input) => {
-    expect(parseDuration(input)).toBeNull();
-  });
+  it.each(['', 'un rato', 'media hora', '1 hora y media', 'abc 10', 'de 11 a 9', 'de 25 a 26', '9:70 a 10'])(
+    '"%s" no se entiende',
+    (input) => {
+      expect(parseDuration(input)).toBeNull();
+    },
+  );
 
   it('lo que muestra formatMinutes se vuelve a entender', () => {
     for (const m of [5, 45, 60, 75, 90, 120, 135, 600]) expect(parseDuration(formatMinutes(m))).toBe(m);
@@ -37,19 +47,6 @@ describe('formatos', () => {
     expect(formatMinutes(45)).toBe('45 min');
     expect(formatMinutes(60)).toBe('1 h');
     expect(formatMinutes(80)).toBe('1 h 20 min');
-  });
-
-  it('formatClock', () => {
-    expect(formatClock(0)).toBe('00:00');
-    expect(formatClock(65_000)).toBe('01:05');
-    expect(formatClock(3_725_000)).toBe('1:02:05');
-  });
-});
-
-describe('cronómetro', () => {
-  it('suma lo acumulado más lo que está corriendo', () => {
-    expect(trackedMs({ trackedMs: 1000 })).toBe(1000);
-    expect(trackedMs({ trackedMs: 1000, runningSince: 5000 }, 8000)).toBe(4000);
   });
 });
 

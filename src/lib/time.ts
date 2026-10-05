@@ -1,5 +1,3 @@
-import type { Task } from '../types';
-
 const pad = (n: number) => String(n).padStart(2, '0');
 
 /** 45 → "45 min", 80 → "1 h 20 min", 120 → "2 h". */
@@ -12,23 +10,29 @@ export function formatMinutes(min: number | null | undefined): string {
   return r ? `${h} h ${r} min` : `${h} h`;
 }
 
-/** Cronómetro: "04:07" o "1:04:07". */
-export function formatClock(ms: number): string {
-  const s = Math.max(0, Math.floor(ms / 1000));
-  const h = Math.floor(s / 3600);
-  const m = Math.floor((s % 3600) / 60);
-  const sec = s % 60;
-  return h ? `${h}:${pad(m)}:${pad(sec)}` : `${pad(m)}:${pad(sec)}`;
-}
+const RANGE =
+  /^(?:de\s+)?(\d{1,2})(?:[:.h](\d{2}))?\s*(?:hs?\.?\s*)?(?:a|-|–|hasta)\s*(\d{1,2})(?:[:.h](\d{2}))?\s*(?:hs?\.?)?$/;
 
 /**
  * Interpreta lo que uno escribe para "cuánto tardé":
- * "45", "45m", "45 min", "1h", "1 h 30", "1h30m", "1:30", "1.5h", "1,5 hs", "2 horas 10 minutos".
+ * "45", "45m", "45 min", "1h", "1 h 30", "1h30m", "1:30", "1.5h", "1,5 hs", "2 horas 10 minutos",
+ * o un horario: "de 9 a 10:30", "9:15-11", "14 a 15.30".
  * Devuelve minutos, o null si no se entiende.
  */
 export function parseDuration(input: string): number | null {
-  const s = input.trim().toLowerCase().replace(/,/g, '.');
-  if (!s) return null;
+  const raw = input.trim().toLowerCase();
+  if (!raw) return null;
+
+  const range = raw.match(RANGE);
+  if (range) {
+    const [, h1, m1 = '0', h2, m2 = '0'] = range;
+    const from = Number(h1) * 60 + Number(m1);
+    const to = Number(h2) * 60 + Number(m2);
+    if (Number(h1) > 23 || Number(h2) > 24 || Number(m1) > 59 || Number(m2) > 59 || to <= from) return null;
+    return to - from;
+  }
+
+  const s = raw.replace(/,/g, '.');
 
   const clock = s.match(/^(\d+):(\d{1,2})$/);
   if (clock) return Number(clock[1]) * 60 + Number(clock[2]);
@@ -48,10 +52,6 @@ export function parseDuration(input: string): number | null {
   const leftover = s.replace(token, '').replace(/\by\b/g, '').replace(/\s/g, '');
   if (!found || leftover) return null;
   return Math.round(total);
-}
-
-export function trackedMs(task: Pick<Task, 'trackedMs' | 'runningSince'>, now = Date.now()): number {
-  return task.trackedMs + (task.runningSince != null ? Math.max(0, now - task.runningSince) : 0);
 }
 
 export function dayKey(ts: number): string {

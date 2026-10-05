@@ -3,9 +3,41 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import type { LogEntry, MailLink, Task, TaskKind } from '../types';
 import { uid } from '../lib/id';
 import { TONES } from '../lib/tones';
-import { trackedMs } from '../lib/time';
 
+/** Nombre interno de cuando la app se llamaba "Mojarrita": se mantiene para no perder lo guardado. */
 export const STORAGE_KEY = 'mojarrita:v1';
+
+type PersistedState = Pick<TasksState, 'tasks' | 'log' | 'toneCursor'>;
+
+/** Tareas de ejemplo que traía la 1.0 la primera vez: si siguen tal cual, se sacan. */
+const V1_EXAMPLES = {
+  quick: ['Tocá ▶ para empezar y medir el tiempo', 'Arrastrame al balde gris cuando termines 🐟'],
+  project: 'Mi primer proyecto',
+  subtasks: ['Tildá esta subtarea', 'Agregá otra subtarea acá abajo', 'Cuando esté todo, tirá el proyecto al balde'],
+};
+
+const isUntouchedExample = (t: Task) =>
+  !t.notes &&
+  t.mails.length === 0 &&
+  ((t.kind === 'quick' && V1_EXAMPLES.quick.includes(t.title)) ||
+    (t.kind === 'project' &&
+      t.title === V1_EXAMPLES.project &&
+      t.subtasks.length === V1_EXAMPLES.subtasks.length &&
+      t.subtasks.every((st, i) => st.title === V1_EXAMPLES.subtasks[i])));
+
+/** 1.0 → 1.1: sin cronómetro y sin las tareas-tutorial de ejemplo. */
+export function migrate(state: PersistedState, version: number): PersistedState {
+  if (version >= 2 || !state) return state;
+  const strip = (t: Task): Task => {
+    const { trackedMs: _t, runningSince: _r, ...rest } = t as Task & { trackedMs?: number; runningSince?: number };
+    return rest;
+  };
+  return {
+    ...state,
+    tasks: (state.tasks ?? []).filter((t) => !isUntouchedExample(t)).map(strip),
+    log: (state.log ?? []).map((e) => ({ ...e, task: strip(e.task) })),
+  };
+}
 
 export interface TasksState {
   tasks: Task[];
@@ -24,9 +56,6 @@ export interface TasksState {
   addMail(taskId: string, mail: { url?: string; subject: string }): void;
   removeMail(taskId: string, mailId: string): void;
 
-  startTimer(id: string): void;
-  pauseTimer(id: string): void;
-
   /** Saca la tarea del agua y la guarda en la bitácora. Devuelve el id de la entrada. */
   completeTask(id: string): string | null;
   updateLog(id: string, patch: Partial<Pick<LogEntry, 'minutes' | 'comment'>>): void;
@@ -38,9 +67,6 @@ export interface TasksState {
 }
 
 const mapTask = (tasks: Task[], id: string, fn: (t: Task) => Task) => tasks.map((t) => (t.id === id ? fn(t) : t));
-
-const pause = (t: Task, now: number): Task =>
-  t.runningSince != null ? { ...t, trackedMs: trackedMs(t, now), runningSince: undefined } : t;
 
 export const useTasks = create<TasksState>()(
   persist(
@@ -62,7 +88,6 @@ export const useTasks = create<TasksState>()(
           createdAt: Date.now(),
           mails: [],
           subtasks: [],
-          trackedMs: 0,
         };
         set((s) => ({ tasks: [task, ...s.tasks], toneCursor: s.toneCursor + 1 }));
         return id;
@@ -130,34 +155,10 @@ export const useTasks = create<TasksState>()(
         }));
       },
 
-      startTimer(id) {
-        const now = Date.now();
-        // Una cosa a la vez: arrancar una tarea pausa las demás.
-        set((s) => ({
-          tasks: s.tasks.map((t) =>
-            t.id === id ? (t.runningSince != null ? t : { ...t, runningSince: now }) : pause(t, now),
-          ),
-        }));
-      },
-
-      pauseTimer(id) {
-        const now = Date.now();
-        set((s) => ({ tasks: mapTask(s.tasks, id, (t) => pause(t, now)) }));
-      },
-
       completeTask(id) {
-        const now = Date.now();
         const task = get().tasks.find((t) => t.id === id);
         if (!task) return null;
-        const snapshot = pause(task, now);
-        const entry: LogEntry = {
-          id: uid(),
-          task: snapshot,
-          completedAt: now,
-          // Si usó el cronómetro, eso es lo que tardó (como mínimo 1 minuto).
-          minutes: snapshot.trackedMs > 0 ? Math.max(1, Math.round(snapshot.trackedMs / 60000)) : null,
-          comment: '',
-        };
+        const entry: LogEntry = { id: uid(), task, completedAt: Date.now(), minutes: null, comment: '' };
         set((s) => ({ tasks: s.tasks.filter((t) => t.id !== id), log: [entry, ...s.log] }));
         return entry.id;
       },
@@ -185,9 +186,10 @@ export const useTasks = create<TasksState>()(
     }),
     {
       name: STORAGE_KEY,
-      version: 1,
+      version: 2,
       storage: createJSONStorage(() => localStorage),
       partialize: (s) => ({ tasks: s.tasks, log: s.log, toneCursor: s.toneCursor }),
+      migrate: (persisted, version) => migrate(persisted as PersistedState, version),
     },
   ),
 );

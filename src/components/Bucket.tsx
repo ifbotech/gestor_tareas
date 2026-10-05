@@ -19,7 +19,7 @@ export function Bucket() {
 
   const today = startOfDay();
   const caughtToday = useMemo(() => log.filter((e) => e.completedAt >= today).length, [log, today]);
-  const fishing = phase === 'dragging' || phase === 'flying';
+  const fishing = phase === 'dragging';
 
   useEffect(() => {
     registerBucket(ref.current);
@@ -33,19 +33,6 @@ export function Bucket() {
 
   return (
     <div className={`bucket-dock ${hot ? 'is-hot' : ''} ${fishing ? 'is-fishing' : ''}`}>
-      <AnimatePresence>
-        {fishing && (
-          <motion.div
-            className="bucket-hint"
-            initial={{ opacity: 0, y: 8, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 6, scale: 0.9 }}
-          >
-            {hot ? '¡Soltala!' : 'Tirala al balde'}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       <button
         ref={ref}
         type="button"
@@ -74,82 +61,137 @@ export function Bucket() {
 }
 
 function BucketSvg({ fishCount, hot }: { fishCount: number; hot: boolean }) {
-  // Posiciones fijas para que cada pececito nade siempre en su carril.
+  // Cada pececito nada siempre en su carril dentro del agua.
   const lanes = [
-    { x: 38, y: 60, d: 40, dur: 5.2, delay: 0 },
-    { x: 70, y: 64, d: -34, dur: 6.1, delay: -1.3 },
-    { x: 52, y: 56.5, d: 44, dur: 7.0, delay: -2.6 },
-    { x: 88, y: 59, d: -42, dur: 5.6, delay: -3.1 },
-    { x: 46, y: 65.5, d: 36, dur: 6.6, delay: -0.7 },
-    { x: 96, y: 63, d: -30, dur: 4.8, delay: -2.0 },
-    { x: 62, y: 60, d: 30, dur: 7.6, delay: -4.2 },
+    { x: 46, y: 62, d: 36, dur: 6.2, delay: 0 },
+    { x: 96, y: 66, d: -34, dur: 7.1, delay: -1.3 },
+    { x: 60, y: 58.5, d: 40, dur: 8.0, delay: -2.6 },
+    { x: 108, y: 60.5, d: -40, dur: 6.6, delay: -3.1 },
+    { x: 52, y: 67, d: 32, dur: 7.6, delay: -0.7 },
+    { x: 112, y: 64, d: -28, dur: 5.8, delay: -2.0 },
+    { x: 72, y: 62, d: 28, dur: 8.6, delay: -4.2 },
   ];
   return (
     <svg viewBox="0 0 160 172" className="bucket-svg" aria-hidden="true">
       <defs>
+        {/* chapa galvanizada: sombreado de cilindro con un brillo principal y otro secundario */}
         <linearGradient id="bk-body" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#77828d" />
-          <stop offset="0.16" stopColor="#b6bfc8" />
-          <stop offset="0.36" stopColor="#e6ebef" />
-          <stop offset="0.55" stopColor="#b2bbc4" />
-          <stop offset="0.85" stopColor="#8a949e" />
-          <stop offset="1" stopColor="#6a7480" />
+          <stop offset="0" stopColor="#5f6a72" />
+          <stop offset="0.07" stopColor="#818c94" />
+          <stop offset="0.2" stopColor="#b9c2c8" />
+          <stop offset="0.3" stopColor="#e3e8eb" />
+          <stop offset="0.36" stopColor="#c6ced3" />
+          <stop offset="0.55" stopColor="#a3adb4" />
+          <stop offset="0.72" stopColor="#b8c0c6" />
+          <stop offset="0.86" stopColor="#8a959d" />
+          <stop offset="1" stopColor="#5b666e" />
+        </linearGradient>
+        <linearGradient id="bk-shade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#1f2a31" stopOpacity="0.28" />
+          <stop offset="0.12" stopColor="#1f2a31" stopOpacity="0" />
+          <stop offset="0.8" stopColor="#1f2a31" stopOpacity="0" />
+          <stop offset="1" stopColor="#1f2a31" stopOpacity="0.22" />
         </linearGradient>
         <linearGradient id="bk-rim" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#8f99a3" />
-          <stop offset="0.35" stopColor="#f3f6f8" />
-          <stop offset="0.7" stopColor="#c3cad1" />
-          <stop offset="1" stopColor="#7f8994" />
+          <stop offset="0" stopColor="#6e7981" />
+          <stop offset="0.28" stopColor="#f2f5f6" />
+          <stop offset="0.5" stopColor="#bcc5cb" />
+          <stop offset="0.78" stopColor="#d6dde1" />
+          <stop offset="1" stopColor="#68737b" />
         </linearGradient>
-        <radialGradient id="bk-water" cx="0.45" cy="0.35" r="0.8">
-          <stop offset="0" stopColor="#8fd6fb" />
-          <stop offset="0.6" stopColor="#3f9fe0" />
-          <stop offset="1" stopColor="#2a74b8" />
+        <linearGradient id="bk-inside" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#4f5a61" />
+          <stop offset="1" stopColor="#7d888f" />
+        </linearGradient>
+        <radialGradient id="bk-water" cx="0.42" cy="0.3" r="0.85">
+          <stop offset="0" stopColor="#a9dbee" />
+          <stop offset="0.55" stopColor="#5fb2cf" />
+          <stop offset="1" stopColor="#2e7f9b" />
         </radialGradient>
+        <radialGradient id="bk-floor" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stopColor="#023047" stopOpacity="0.28" />
+          <stop offset="1" stopColor="#023047" stopOpacity="0" />
+        </radialGradient>
+        {/* textura de galvanizado: manchitas muy suaves */}
+        <filter id="bk-spangle" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.09 0.05" numOctaves="2" seed="4" result="n" />
+          <feColorMatrix in="n" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.55 -0.18" />
+        </filter>
+        <clipPath id="bk-body-clip">
+          <path d="M22 56 L26 156 A54 10 0 0 0 134 156 L138 56 A58 13 0 0 1 22 56 Z" />
+        </clipPath>
         <clipPath id="bk-water-clip">
-          <ellipse cx="80" cy="61" rx="58" ry="11" />
+          <ellipse cx="80" cy="62" rx="53" ry="10" />
         </clipPath>
       </defs>
 
       {/* sombra en el piso */}
-      <ellipse cx="80" cy="163" rx="60" ry="7" fill="#0d3b5e" opacity="0.16" />
+      <ellipse cx="80" cy="160" rx="66" ry="11" fill="url(#bk-floor)" />
 
-      {/* manija */}
+      {/* manija de alambre con mango */}
       <g className="bucket-handle">
-        <path d="M16 62 C14 6 146 6 144 62" fill="none" stroke="#56606a" strokeWidth="4.5" strokeLinecap="round" />
+        <path d="M19 63 C17 2 143 2 141 63" fill="none" stroke="#4c565d" strokeWidth="2.6" strokeLinecap="round" />
         <path
-          d="M18 60 C17 9 143 9 142 60"
+          d="M20.2 61 C18.6 5 141.4 5 139.8 61"
           fill="none"
-          stroke="#c8d0d7"
-          strokeWidth="1.3"
+          stroke="#c3cbd0"
+          strokeWidth="0.8"
           strokeLinecap="round"
           opacity="0.8"
         />
-        <rect x="64" y="7" width="32" height="10" rx="5" fill="#3d4650" />
-        <rect x="66" y="8.5" width="28" height="3" rx="1.5" fill="#6b7580" />
+        <rect x="64" y="7.5" width="32" height="8.5" rx="4.25" fill="#3a332c" />
+        <rect x="66" y="8.6" width="28" height="2.4" rx="1.2" fill="#6d6155" opacity="0.8" />
       </g>
 
-      {/* cuerpo */}
+      {/* cuerpo cilíndrico */}
+      <path d="M22 56 L26 156 A54 10 0 0 0 134 156 L138 56 A58 13 0 0 1 22 56 Z" fill="url(#bk-body)" />
+      <g clipPath="url(#bk-body-clip)">
+        <rect x="0" y="40" width="160" height="130" filter="url(#bk-spangle)" opacity="0.5" />
+        <rect x="0" y="40" width="160" height="130" fill="url(#bk-shade)" />
+        {/* costura vertical */}
+        <path d="M50 66 L52 164" stroke="#6b767e" strokeWidth="1.1" opacity="0.55" />
+        <path d="M51.4 66 L53.4 164" stroke="#f4f7f8" strokeWidth="0.7" opacity="0.5" />
+        {/* nervaduras */}
+        <path d="M23.4 92 A56.6 12.2 0 0 0 136.6 92" fill="none" stroke="#5e6970" strokeWidth="2" opacity="0.55" />
+        <path
+          d="M23.5 94.6 A56.5 12.2 0 0 0 136.5 94.6"
+          fill="none"
+          stroke="#ffffff"
+          strokeWidth="1.3"
+          opacity="0.45"
+        />
+        <path d="M24.8 126 A55.2 11 0 0 0 135.2 126" fill="none" stroke="#5e6970" strokeWidth="2" opacity="0.55" />
+        <path
+          d="M24.9 128.6 A55.1 11 0 0 0 135.1 128.6"
+          fill="none"
+          stroke="#ffffff"
+          strokeWidth="1.3"
+          opacity="0.45"
+        />
+        {/* borde del fondo */}
+        <path d="M25.7 150 A54.3 10 0 0 0 134.3 150" fill="none" stroke="#56616a" strokeWidth="1.6" opacity="0.5" />
+      </g>
       <path
-        d="M14 58 L34 154 Q80 167 126 154 L146 58 Z"
-        fill="url(#bk-body)"
-        stroke="#5f6974"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
+        d="M22 56 L26 156 A54 10 0 0 0 134 156 L138 56"
+        fill="none"
+        stroke="#525d65"
+        strokeWidth="1"
+        opacity="0.7"
       />
-      <path d="M20.5 89 Q80 105 139.5 89" fill="none" stroke="#66707b" strokeWidth="2.2" opacity="0.55" />
-      <path d="M21 92 Q80 108 139 92" fill="none" stroke="#fff" strokeWidth="1.6" opacity="0.35" />
-      <path d="M27.5 123 Q80 137 132.5 123" fill="none" stroke="#66707b" strokeWidth="2.2" opacity="0.55" />
-      <path d="M28 126 Q80 140 132 126" fill="none" stroke="#fff" strokeWidth="1.6" opacity="0.35" />
-      <path d="M44 70 L54 150" stroke="#fff" strokeWidth="6" opacity="0.22" strokeLinecap="round" />
 
-      {/* orejas de la manija */}
-      <circle cx="15" cy="64" r="4.5" fill="#5f6974" />
-      <circle cx="145" cy="64" r="4.5" fill="#5f6974" />
+      {/* orejas remachadas donde engancha la manija */}
+      <g>
+        <rect x="14.5" y="58" width="9" height="12" rx="2.5" fill="#8d979e" stroke="#59646b" strokeWidth="0.8" />
+        <circle cx="19" cy="66.5" r="1.2" fill="#e8edef" stroke="#5f6a71" strokeWidth="0.5" />
+        <circle cx="19" cy="63" r="2" fill="none" stroke="#3f494f" strokeWidth="1.1" />
+        <rect x="136.5" y="58" width="9" height="12" rx="2.5" fill="#76818a" stroke="#4f5a61" strokeWidth="0.8" />
+        <circle cx="141" cy="66.5" r="1.2" fill="#d5dcdf" stroke="#5f6a71" strokeWidth="0.5" />
+        <circle cx="141" cy="63" r="2" fill="none" stroke="#3f494f" strokeWidth="1.1" />
+      </g>
 
-      {/* boca: borde, interior y agua */}
-      <ellipse cx="80" cy="58" rx="66" ry="15" fill="#4a545e" />
-      <ellipse cx="80" cy="61" rx="58" ry="11" fill="url(#bk-water)" />
+      {/* boca: pared interior, agua y borde enrollado */}
+      <ellipse cx="80" cy="56" rx="58" ry="13" fill="url(#bk-inside)" />
+      <ellipse cx="80" cy="62" rx="53" ry="10" fill="url(#bk-water)" />
       <g clipPath="url(#bk-water-clip)">
         {Array.from({ length: fishCount }, (_, i) => {
           const l = lanes[i];
@@ -166,26 +208,30 @@ function BucketSvg({ fishCount, hot }: { fishCount: number; hot: boolean }) {
               }
             >
               <g transform={`translate(${l.x} ${l.y}) scale(${l.d < 0 ? -1 : 1} 1)`}>
-                <path d="M-8 0 L-13 -3.5 C-12 -1 -12 1 -13 3.5 Z" fill="#f2a945" opacity="0.85" />
+                <path d="M-8.5 0 L-13 -2.6 C-12.2 -0.8 -12.2 0.8 -13 2.6 Z" fill="#e7a84a" opacity="0.85" />
                 <path
-                  d="M-9 0 C-6 -4 4 -4.5 9 -1.5 C10 -0.8 10.5 0 10.5 0 C10.5 0 10 0.8 9 1.5 C4 4.5 -6 4 -9 0 Z"
-                  fill="#dbe8f0"
+                  d="M-9 0 C-6 -2.4 2 -3 7 -1.4 C8.6 -0.8 9.6 0 9.6 0 C9.6 0 8.6 0.8 7 1.4 C2 3 -6 2.4 -9 0 Z"
+                  fill="#e6e4d2"
                   opacity="0.92"
                 />
-                <circle cx="7" cy="-0.8" r="0.9" fill="#15212a" />
+                <path d="M-9 0.1 L5 0" stroke="#c4d6de" strokeWidth="0.9" />
+                <circle cx="6.6" cy="-0.5" r="0.75" fill="#15212a" />
               </g>
             </g>
           );
         })}
-        <ellipse className="bucket-shine" cx="62" cy="56" rx="22" ry="3" fill="#fff" opacity="0.28" />
+        <ellipse cx="64" cy="57.5" rx="22" ry="2.6" fill="#fff" opacity="0.3" />
         {hot && (
           <g className="bucket-ripples">
-            <ellipse cx="80" cy="61" rx="18" ry="3.6" />
-            <ellipse cx="80" cy="61" rx="18" ry="3.6" />
+            <ellipse cx="80" cy="62" rx="18" ry="3.4" />
+            <ellipse cx="80" cy="62" rx="18" ry="3.4" />
           </g>
         )}
       </g>
-      <ellipse cx="80" cy="58" rx="66" ry="15" fill="none" stroke="url(#bk-rim)" strokeWidth="5.5" />
+      {/* borde enrollado: parte de atrás (más oscura) y parte de adelante (con brillo) */}
+      <path d="M22 56 A58 13 0 0 1 138 56" fill="none" stroke="#7d878e" strokeWidth="4" />
+      <path d="M138 56 A58 13 0 0 1 22 56" fill="none" stroke="url(#bk-rim)" strokeWidth="5" />
+      <path d="M134 60.2 A55 10.5 0 0 1 26 60.2" fill="none" stroke="#ffffff" strokeWidth="0.9" opacity="0.55" />
     </svg>
   );
 }

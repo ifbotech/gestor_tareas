@@ -2,7 +2,7 @@ import type { LogEntry, Task } from '../types';
 import { dayKey, formatMinutes, formatTime } from './time';
 
 export interface Backup {
-  app: 'mojarrita';
+  app: 'mis-tareas';
   version: 1;
   exportedAt: string;
   tasks: Task[];
@@ -22,7 +22,7 @@ export function downloadFile(name: string, content: string, type: string) {
 }
 
 export function makeBackup(tasks: Task[], log: LogEntry[]): Backup {
-  return { app: 'mojarrita', version: 1, exportedAt: new Date().toISOString(), tasks, log };
+  return { app: 'mis-tareas', version: 1, exportedAt: new Date().toISOString(), tasks, log };
 }
 
 const isObj = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null;
@@ -47,7 +47,7 @@ export function parseBackup(text: string): { tasks: Task[]; log: LogEntry[] } {
     throw new Error('El archivo no es un backup válido (no es JSON).');
   }
   if (!isObj(data) || !Array.isArray(data.tasks) || !Array.isArray(data.log)) {
-    throw new Error('El archivo no parece un backup de Mojarrita.');
+    throw new Error('El archivo no parece una copia de Mis tareas.');
   }
   const tasks = data.tasks.filter(isTask).map(normalizeTask);
   const log = data.log
@@ -69,7 +69,6 @@ function normalizeTask(t: Task): Task {
     notes: typeof t.notes === 'string' ? t.notes : '',
     tone: typeof t.tone === 'number' ? t.tone : 0,
     createdAt: typeof t.createdAt === 'number' ? t.createdAt : Date.now(),
-    trackedMs: typeof t.trackedMs === 'number' ? t.trackedMs : 0,
   };
 }
 

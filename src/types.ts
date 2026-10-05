@@ -25,10 +25,6 @@ export interface Task {
   createdAt: number;
   mails: MailLink[];
   subtasks: Subtask[];
-  /** Tiempo acumulado con el cronómetro (ms). */
-  trackedMs: number;
-  /** Timestamp desde el que corre el cronómetro, si está en marcha. */
-  runningSince?: number;
   /** Proyectos: subtareas plegadas. */
   collapsed?: boolean;
 }

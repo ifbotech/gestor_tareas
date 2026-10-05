@@ -6,9 +6,9 @@ import { formatMinutes, parseDuration } from '../lib/time';
 import { Fish } from './Fish';
 import { IconUndo, IconX } from './Icons';
 
-const QUICK = [10, 15, 30, 45, 60, 90, 120];
+const QUICK = [15, 30, 45, 60, 90, 120, 180];
 
-/** Aparece arriba del balde después de pescar: ¿cuánto tardaste? Se guarda mientras escribís. */
+/** Aparece arriba del balde al soltar una tarea: ¿cuánto tardaste? Se guarda mientras escribís. */
 export function CatchCard() {
   const entryId = useUI((s) => s.catchEntryId);
   const showCatch = useUI((s) => s.showCatch);
@@ -67,7 +67,7 @@ function CatchCardBody({ entryId, onClose }: { entryId: string; onClose(): void 
         <IconX size={16} />
       </button>
       <div className="catch-head">
-        <Fish width={64} className="catch-fish" />
+        <Fish width={72} className="catch-fish" />
         <div>
           <p className="catch-kicker">¡Al balde!</p>
           <p className="catch-title">{entry.task.title}</p>
@@ -91,11 +91,11 @@ function CatchCardBody({ entryId, onClose }: { entryId: string; onClose(): void 
           className={`input ${invalid ? 'is-invalid' : ''}`}
           value={text}
           onChange={(e) => setMinutes(e.target.value)}
-          placeholder="ej: 40 min, 1h 30, 2h"
+          placeholder="ej: 40 min, 1h 30, de 9 a 10:30"
           autoComplete="off"
           inputMode="text"
         />
-        {invalid && <p className="hint hint--warn">No entendí. Probá con “45 min” o “1h 30”.</p>}
+        {invalid && <p className="hint hint--warn">No entendí. Probá con “45 min”, “1h 30” o “de 9 a 10:30”.</p>}
         <div className="chips">
           {QUICK.map((m) => (
             <button

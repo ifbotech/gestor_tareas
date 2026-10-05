@@ -7,19 +7,17 @@ import { ProjectCard, QuickCard } from './TaskCards';
 import { MiniFish } from './Fish';
 import { IconPlus } from './Icons';
 
-const COPY: Record<TaskKind, { title: string; sub: string; placeholder: string; empty: string; inputId: string }> = {
+const COPY: Record<TaskKind, { title: string; placeholder: string; empty: string; inputId: string }> = {
   quick: {
     title: 'Tareas rápidas',
-    sub: 'Se empiezan y se terminan. Sin vueltas.',
-    placeholder: '¿Qué hay que hacer?',
-    empty: 'Nada pendiente. El agua está tranquila.',
+    placeholder: 'Nueva tarea…',
+    empty: 'Nada pendiente.',
     inputId: 'add-quick',
   },
   project: {
     title: 'Proyectos',
-    sub: 'Con subtareas para ir tildando.',
     placeholder: 'Nuevo proyecto…',
-    empty: 'Sin proyectos. Creá uno y sumale subtareas.',
+    empty: 'Sin proyectos en curso.',
     inputId: 'add-project',
   },
 };
@@ -48,7 +46,6 @@ export function Pond({ kind }: { kind: TaskKind }) {
         <h2 id={`${copy.inputId}-title`}>{copy.title}</h2>
         <span className="pond-count">{tasks.length}</span>
       </header>
-      <p className="pond-sub">{copy.sub}</p>
 
       <form
         className="add-form"
